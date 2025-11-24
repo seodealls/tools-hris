@@ -327,6 +327,9 @@ export default function SeveranceCalculator() {
 
   // --- RENDER ---
   useEffect(() => {
+    // Set HTML lang attribute
+    document.documentElement.lang = 'id';
+
     // Set Meta Title
     document.title = "Kalkulator Perhitungan Pesangon Gratis | KantorKu";
 

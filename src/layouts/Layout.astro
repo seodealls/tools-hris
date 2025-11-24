@@ -1,5 +1,10 @@
 ---
 import "../styles/global.css";
+
+const {
+	title = "Astro Basics",
+	description,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -9,7 +14,8 @@ import "../styles/global.css";
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
+		{description && <meta name="description" content={description} />}
 	</head>
 	<body>
 		<slot />
