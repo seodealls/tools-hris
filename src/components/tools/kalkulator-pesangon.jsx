@@ -226,7 +226,7 @@ export default function SeveranceCalculator() {
   const [sisaCuti, setSisaCuti] = useState(0);
   const [transport, setTransport] = useState(0);
   const [includeHousingMedical, setIncludeHousingMedical] = useState(true);
-  const [openFaq, setOpenFaq] = useState(null); // State for Accordion
+  const [openFaq, setOpenFaq] = useState([]); // State for Accordion, now an array
   
   // STATE: Alasan PHK
   const [terminationReason, setTerminationReason] = useState(TERMINATION_REASONS[0].value);
@@ -248,7 +248,13 @@ export default function SeveranceCalculator() {
   };
 
   const toggleFaq = (index) => {
-    setOpenFaq(openFaq === index ? null : index);
+    setOpenFaq(prevOpenFaq => {
+      if (prevOpenFaq.includes(index)) {
+        return prevOpenFaq.filter(i => i !== index); // Close if already open
+      } else {
+        return [...prevOpenFaq, index]; // Open if closed
+      }
+    });
   };
 
   // State sekarang menyimpan angka murni, jadi kalkulasi menjadi lebih sederhana
@@ -390,18 +396,18 @@ export default function SeveranceCalculator() {
           <div className="lg:col-span-7 space-y-6">
             <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden"> 
               <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-                <div className="font-bold text-slate-800 flex items-center gap-2">
+                <h2 className="font-bold text-slate-800 flex items-center gap-2">
                    DATA KARYAWAN
-                </div>
+                </h2>
               </div>
               
               <div className="p-6 space-y-8">
 
                 {/* Section 1: Alasan PHK */}
                 <div className="space-y-4">
-                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
                      Jenis Pemutusan Hubungan Kerja (PHK)
-                  </label>
+                  </h3>
                   <div>
                     <select 
                       value={terminationReason} 
@@ -435,9 +441,9 @@ export default function SeveranceCalculator() {
                 
                 {/* Section 2: Income */}
                 <div className="space-y-4">
-                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
                     <MoneyIcon /> Komponen Upah Bulanan
-                  </label>
+                  </h3>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="group">
                       <label className="block text-xs font-medium text-slate-500 mb-1">Gaji Pokok + Tunjangan Tetap</label>
@@ -473,9 +479,9 @@ export default function SeveranceCalculator() {
                 {/* Section 3: Tenure */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                     <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                     <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
                       <CalendarIcon /> Masa Kerja
-                    </label>
+                    </h3>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-slate-500">Mode Manual</span>
                        <input 
@@ -538,7 +544,7 @@ export default function SeveranceCalculator() {
 
                 {/* Section 4: Hak Lain */}
                 <div className="space-y-4">
-                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Hak Lainnya</label>
+                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Hak Lainnya</h3>
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs font-medium text-slate-500 mb-1">Sisa Cuti (Hari)</label>
@@ -594,8 +600,8 @@ export default function SeveranceCalculator() {
             </div>
           </div>
 
-          {/* RIGHT: RESULTS (Sticky) */}
-          <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
+          {/* RIGHT: RESULTS (Static) */}
+          <div className="lg:col-span-5 lg:static lg:top-8 space-y-6">
             
             {/* Main Result Card */}
             <div className="bg-white rounded-2xl shadow-2xl shadow-purple-900/10 border border-slate-100 overflow-hidden relative">
@@ -698,14 +704,14 @@ export default function SeveranceCalculator() {
                       <p className="font-semibold mb-1">Diberikan berdasarkan masa kerja :</p>
                       <ul className="list-disc ml-4 space-y-0.5">
                         <li>&lt; 1 tahun: 1 bln Upah</li>
-                        <li>1 &le; masa kerja &lt; 2 thn: 2 bln Upah</li>
-                        <li>2 &le; masa kerja &lt; 3 thn: 3 bln Upah</li>
-                        <li>3 &le; masa kerja &lt; 4 thn: 4 bln Upah</li>
-                        <li>4 &le; masa kerja &lt; 5 thn: 5 bln Upah</li>
-                        <li>5 &le; masa kerja &lt; 6 thn: 6 bln Upah</li>
-                        <li>6 &le; masa kerja &lt; 7 thn: 7 bln Upah</li>
-                        <li>7 &le; masa kerja &lt; 8 thn: 8 bln Upah</li>
-                        <li>&ge; 8 tahun: 9 bln Upah (Maksimal)</li>
+                        <li>1 &le; masa kerja &lt; 2 tahun: 2 bulan Upah</li>
+                        <li>2 &le; masa kerja &lt; 3 tahun: 3 bulan Upah</li>
+                        <li>3 &le; masa kerja &lt; 4 tahun: 4 bulan Upah</li>
+                        <li>4 &le; masa kerja &lt; 5 tahun: 5 bulan Upah</li>
+                        <li>5 &le; masa kerja &lt; 6 tahun: 6 bulan Upah</li>
+                        <li>6 &le; masa kerja &lt; 7 tahun: 7 bulan Upah</li>
+                        <li>7 &le; masa kerja &lt; 8 tahun: 8 bulan Upah</li>
+                        <li>&ge; 8 tahun: 9 bulan Upah (Maksimal)</li>
                       </ul>
                     </td>
                   </tr>
@@ -715,14 +721,14 @@ export default function SeveranceCalculator() {
                       <p className="font-semibold mb-1">Diberikan berdasarkan masa kerja :</p>
                       <ul className="list-disc ml-4 space-y-0.5">
                         <li>MK &lt; 3 tahun: 0 bln Upah</li>
-                        <li>3 &le; masa kerja &lt; 6 thn: 2 bln Upah</li>
-                        <li>6 &le; masa kerja &lt; 9 thn: 3 bln Upah</li>
-                        <li>9 &le; masa kerja &lt; 12 thn: 4 bln Upah</li>
-                        <li>12 &le; masa kerja &lt; 15 thn: 5 bln Upah</li>
-                        <li>15 &le; masa kerja &lt; 18 thn: 6 bln Upah</li>
-                        <li>18 &le; masa kerja &lt; 21 thn: 7 bln Upah</li>
-                        <li>21 &le; masa kerja &lt; 24 thn: 8 bln Upah</li>
-                        <li>&ge; 24 tahun: 10 bln Upah (Maksimal)</li>
+                        <li>3 &le; masa kerja &lt; 6 tahun: 2 bulan Upah</li>
+                        <li>6 &le; masa kerja &lt; 9 tahun: 3 bulan Upah</li>
+                        <li>9 &le; masa kerja &lt; 12 tahun: 4 bulan Upah</li>
+                        <li>12 &le; masa kerja &lt; 15 tahun: 5 bulan Upah</li>
+                        <li>15 &le; masa kerja &lt; 18 tahun: 6 bulan Upah</li>
+                        <li>18 &le; masa kerja &lt; 21 tahun: 7 bulan Upah</li>
+                        <li>21 &le; masa kerja &lt; 24 tahun: 8 bulan Upah</li>
+                        <li>&ge; 24 tahun: 10 bulan Upah (Maksimal)</li>
                       </ul>
                     </td>
                   </tr>
@@ -765,9 +771,9 @@ export default function SeveranceCalculator() {
                     className="w-full flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors text-left"
                   >
                     <h3 className="font-semibold text-slate-800 text-sm pr-4">{item.question}</h3>
-                    <ChevronDownIcon className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-200 ${openFaq === index ? 'rotate-180' : ''}`} />
+                    <ChevronDownIcon className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-200 ${openFaq.includes(index) ? 'rotate-180' : ''}`} />
                   </button>
-                  {openFaq === index && (
+                  {openFaq.includes(index) && (
                     <div className="p-4 pt-0 text-sm text-slate-600 bg-white border-t border-slate-50 animate-in fade-in slide-in-from-top-2">
                        <div className="pt-3">
                          {item.answer}
