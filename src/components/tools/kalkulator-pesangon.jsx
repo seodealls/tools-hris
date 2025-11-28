@@ -380,10 +380,10 @@ export default function SeveranceCalculator() {
         <div className="relative max-w-6xl mx-auto text-center">
            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm mb-6">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-medium text-white">Kantorku.id Tool</span>
+            <span className="text-sm font-medium text-white">Kantorku.id Tool</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Kalkulator Perhitungan Pesangon</h1>
-          <p className="text-purple-100 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Kalkulator Perhitungan Pesangon</h1>
+          <p className="text-purple-100 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
             Kalkulator pesangon ini memberikan estimasi terperinci berdasarkan masa kerja dan gaji terakhir, untuk membantu memahami hak yang diatur dalam PP No. 35 Tahun 2021.
           </p>
         </div>
@@ -405,14 +405,14 @@ export default function SeveranceCalculator() {
 
                 {/* Section 1: Alasan PHK */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-base font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
                      Jenis Pemutusan Hubungan Kerja (PHK)
                   </h3>
                   <div>
                     <select 
                       value={terminationReason} 
                       onChange={(e) => setTerminationReason(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 text-slate-900 font-medium text-sm"
+                      className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 text-slate-900 font-medium text-base"
                     >
                       {TERMINATION_REASONS.map(reason => (
                           <option key={reason.value} value={reason.value}>
@@ -425,12 +425,12 @@ export default function SeveranceCalculator() {
                       <div className="mt-0.5">
                          {currentReason.up === 0 ? <AlertIcon /> : <InfoIcon />}
                       </div>
-                      <div className="text-xs text-slate-700">
+                      <div className="text-sm text-slate-700">
                         <p className="font-bold text-slate-800 mb-1">Dasar Hukum & Ketentuan:</p>
                         <p>{currentReason.info}</p>
                         <div className="mt-2 flex gap-2">
-                          <span className="bg-white px-2 py-0.5 rounded border border-slate-200 font-mono text-[10px] font-semibold">UP: {currentReason.up}x</span>
-                          <span className="bg-white px-2 py-0.5 rounded border border-slate-200 font-mono text-[10px] font-semibold">UPMK: {currentReason.upmk}x</span>
+                          <span className="bg-white px-2 py-0.5 rounded border border-slate-200 font-mono text-xs font-semibold">UP: {currentReason.up}x</span>
+                          <span className="bg-white px-2 py-0.5 rounded border border-slate-200 font-mono text-xs font-semibold">UPMK: {currentReason.upmk}x</span>
                         </div>
                       </div>
                     </div>
@@ -441,14 +441,14 @@ export default function SeveranceCalculator() {
                 
                 {/* Section 2: Income */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-base font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
                     <MoneyIcon /> Komponen Upah Bulanan
                   </h3>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="group">
-                      <label className="block text-xs font-medium text-slate-500 mb-1">Gaji Pokok + Tunjangan Tetap</label>
+                      <label className="block text-sm font-medium text-slate-500 mb-1">Gaji Pokok + Tunjangan Tetap</label>
                       <div className="relative">
-                        <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-medium">Rp</span>
+                        <span className="absolute left-3 top-2.5 text-slate-400 text-base font-medium">Rp</span>
                         <input 
                           type="text"
                           inputMode="numeric"
@@ -459,9 +459,9 @@ export default function SeveranceCalculator() {
                       </div>
                     </div>
                     <div className="group">
-                      <label className="block text-xs font-medium text-slate-500 mb-1">Tunjangan Lain (Opsional)</label>
+                      <label className="block text-sm font-medium text-slate-500 mb-1">Tunjangan Lain (Opsional)</label>
                       <div className="relative">
-                         <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-medium">Rp</span>
+                         <span className="absolute left-3 top-2.5 text-slate-400 text-base font-medium">Rp</span>
                         <input 
                           type="text"
                           inputMode="numeric"
@@ -479,11 +479,11 @@ export default function SeveranceCalculator() {
                 {/* Section 3: Tenure */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                     <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                     <h3 className="text-base font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
                       <CalendarIcon /> Masa Kerja
                     </h3>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-500">Mode Manual</span>
+                      <span className="text-sm text-slate-500">Mode Manual</span>
                        <input 
                         type="checkbox" 
                         className="toggle toggle-primary h-5 w-9 accent-purple-600 cursor-pointer" 
@@ -496,7 +496,7 @@ export default function SeveranceCalculator() {
                   {useDirectMasaKerja ? (
                     <div className="p-4 bg-purple-50 rounded-xl border border-purple-100 grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
                       <div>
-                        <label className="block text-xs font-medium text-purple-900 mb-1">Total Tahun</label>
+                        <label className="block text-sm font-medium text-purple-900 mb-1">Total Tahun</label>
                         <input 
                           type="number" 
                           value={yearsInput} 
@@ -506,7 +506,7 @@ export default function SeveranceCalculator() {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-purple-900 mb-1">Total Bulan</label>
+                        <label className="block text-sm font-medium text-purple-900 mb-1">Total Bulan</label>
                         <input 
                           type="number" 
                           value={monthsInput} 
@@ -519,7 +519,7 @@ export default function SeveranceCalculator() {
                   ) : (
                     <div className="grid sm:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
                       <div>
-                        <label className="block text-xs font-medium text-slate-500 mb-1">Mulai Bekerja</label>
+                        <label className="block text-sm font-medium text-slate-500 mb-1">Mulai Bekerja</label>
                         <input 
                           type="date" 
                           value={startDate} 
@@ -528,7 +528,7 @@ export default function SeveranceCalculator() {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-slate-500 mb-1">Tanggal PHK</label>
+                        <label className="block text-sm font-medium text-slate-500 mb-1">Tanggal PHK</label>
                         <input 
                           type="date" 
                           value={endDate} 
@@ -544,10 +544,10 @@ export default function SeveranceCalculator() {
 
                 {/* Section 4: Hak Lain */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Hak Lainnya</h3>
+                  <h3 className="text-base font-bold text-slate-700 uppercase tracking-wider">Hak Lainnya</h3>
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-medium text-slate-500 mb-1">Sisa Cuti (Hari)</label>
+                      <label className="block text-sm font-medium text-slate-500 mb-1">Sisa Cuti (Hari)</label>
                       <input 
                         type="number" 
                         value={sisaCuti} 
@@ -556,7 +556,7 @@ export default function SeveranceCalculator() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-500 mb-1">Hari Kerja / Minggu</label>
+                      <label className="block text-sm font-medium text-slate-500 mb-1">Hari Kerja / Minggu</label>
                       <select 
                         value={workWeek} 
                         onChange={(e)=>setWorkWeek(Number(e.target.value))} 
@@ -567,9 +567,9 @@ export default function SeveranceCalculator() {
                       </select>
                     </div>
                     <div className="sm:col-span-2">
-                       <label className="block text-xs font-medium text-slate-500 mb-1">Ongkos Pulang (Opsional)</label>
+                       <label className="block text-sm font-medium text-slate-500 mb-1">Ongkos Pulang (Opsional)</label>
                         <div className="relative">
-                         <span className="absolute left-3 top-2.5 text-slate-400 text-sm font-medium">Rp</span>
+                         <span className="absolute left-3 top-2.5 text-slate-400 text-base font-medium">Rp</span>
                           <input 
                             type="text"
                             inputMode="numeric"
@@ -589,9 +589,9 @@ export default function SeveranceCalculator() {
                       onChange={(e)=>setIncludeHousingMedical(e.target.checked)} 
                       className="mt-1 h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                     />
-                    <label htmlFor="hm" className="text-sm text-slate-600 cursor-pointer">
+                    <label htmlFor="hm" className="text-base text-slate-600 cursor-pointer">
                       <span className="font-medium text-slate-900">Termasuk UPH 15%?</span>
-                      <p className="text-xs text-slate-500 mt-0.5">Untuk penggantian perumahan & pengobatan (dari total UP + UPMK).</p>
+                      <p className="text-sm text-slate-500 mt-0.5">Untuk penggantian perumahan & pengobatan (dari total UP + UPMK).</p>
                     </label>
                   </div>
                 </div>
@@ -608,8 +608,8 @@ export default function SeveranceCalculator() {
                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 to-indigo-600"></div>
                
                <div className="p-6 bg-slate-50 border-b border-slate-100">
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Estimasi Masa Kerja</p>
-                  <div className="text-xl font-bold text-slate-800">
+                  <p className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Estimasi Masa Kerja</p>
+                  <div className="text-2xl font-bold text-slate-800">
                     {Math.floor(tenureMonths/12)} Tahun <span className="text-slate-400 font-normal">|</span> {tenureMonths%12} Bulan
                   </div>
                </div>
@@ -618,37 +618,37 @@ export default function SeveranceCalculator() {
                   {/* UP */}
                   <div className="flex justify-between items-center pb-4 border-b border-slate-100 border-dashed">
                      <div>
-                        <p className="text-sm font-medium text-slate-600">Uang Pesangon (UP)</p>
-                        <span className="text-xs text-purple-600 font-medium bg-purple-50 px-2 py-0.5 rounded">
+                        <p className="text-base font-medium text-slate-600">Uang Pesangon (UP)</p>
+                        <span className="text-sm text-purple-600 font-medium bg-purple-50 px-2 py-0.5 rounded">
                            {baseUPMonths} x Upah ({currentReason.up}x)
                         </span>
                      </div>
-                     <p className="text-base font-bold text-slate-800">{fmt(UP)}</p>
+                     <p className="text-lg font-bold text-slate-800">{fmt(UP)}</p>
                   </div>
 
                   {/* UPMK */}
                    <div className="flex justify-between items-center pb-4 border-b border-slate-100 border-dashed">
                      <div>
-                        <p className="text-sm font-medium text-slate-600">Uang Penghargaan Masa Kerja (UPMK)</p>
-                        <span className="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded">
+                        <p className="text-base font-medium text-slate-600">Uang Penghargaan Masa Kerja (UPMK)</p>
+                        <span className="text-sm text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded">
                            {baseUPMKMonths} x Upah ({currentReason.upmk}x)
                         </span>
                      </div>
-                     <p className="text-base font-bold text-slate-800">{fmt(UPMK)}</p>
+                     <p className="text-lg font-bold text-slate-800">{fmt(UPMK)}</p>
                   </div>
 
                   {/* UPH Breakdown */}
                   <div className="bg-slate-50 rounded-lg p-4 space-y-2">
-                    <p className="text-xs font-bold text-slate-500 uppercase mb-2">Uang Penggantian Hak (UPH)</p>
-                    <div className="flex justify-between text-sm">
+                    <p className="text-sm font-bold text-slate-500 uppercase mb-2">Uang Penggantian Hak (UPH)</p>
+                    <div className="flex justify-between text-base">
                        <span className="text-slate-600">Cuti ({sisaCuti} hari)</span>
                        <span className="font-medium">{fmt(cutiValue)}</span>
                     </div>
-                    <div className="flex justify-between text-sm">
+                    <div className="flex justify-between text-base">
                        <span className="text-slate-600">Ongkos</span>
                        <span className="font-medium">{fmt(transportValue)}</span>
                     </div>
-                    <div className="flex justify-between text-sm">
+                    <div className="flex justify-between text-base">
                        <span className="text-slate-600">Perumahan (15%)</span>
                        <span className="font-medium">{fmt(housingMedicalValue)}</span>
                     </div>
@@ -656,12 +656,12 @@ export default function SeveranceCalculator() {
 
                   {/* TOTAL */}
                   <div className="bg-purple-600 rounded-xl p-5 text-white shadow-lg shadow-purple-600/30 mt-2">
-                     <p className="text-sm text-purple-100 mb-1">Total Estimasi Kompensasi</p>
-                     <p className="text-3xl font-bold">{fmt(total)}</p>
+                     <p className="text-base text-purple-100 mb-1">Total Estimasi Kompensasi</p>
+                     <p className="text-4xl font-bold">{fmt(total)}</p>
                      
                      {/* UANG PISAH NOTIFICATION */}
                      {(currentReason.up === 0 && currentReason.upmk === 0) && (
-                       <div className="mt-3 pt-3 border-t border-purple-500/30 text-xs text-purple-100">
+                       <div className="mt-3 pt-3 border-t border-purple-500/30 text-sm text-purple-100">
                          <span className="font-bold">Catatan Penting:</span> Karyawan mungkin berhak atas <strong>Uang Pisah</strong>. Besaran Uang Pisah diatur dalam Perjanjian Kerja, Peraturan Perusahaan atau Perjanjian Kerja Bersama.
                        </div>
                      )}
@@ -672,9 +672,38 @@ export default function SeveranceCalculator() {
             {/* Disclaimer */}
              <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-4 flex gap-3">
                 <InfoIcon />
-                <p className="text-xs text-yellow-800 leading-relaxed">
-                  <strong>Disclaimer:</strong> Hasil perhitungan ini adalah estimasi berdasarkan ketentuan normatif PP No. 35 Tahun 2021. Perhitungan final dapat berbeda jika terdapat ketentuan yang lebih menguntungkan dalam Perjanjian Kerja Bersama atau Peraturan Perusahaan Anda.
+                <p className="text-sm text-yellow-800 leading-relaxed">
+                  <strong>Disclaimer:</strong> Hasil perhitungan ini adalah estimasi berdasarkan ketentuan normatif PP No. 35 Tahun 2021.
                 </p>
+             </div>
+
+             {/* Call to Action Card */}
+             <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6 flex items-center gap-6">
+                <div className="flex-1 space-y-3">
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">
+                    Sulit hitung pesangon atau payroll?
+                  </h3>
+                  <p className="text-base text-slate-700 leading-relaxed mb-4">
+                      Biarkan sistem membantu Anda. Akurat, otomatis, dan sesuai peraturan pemerintah.
+                  </p>
+                  <a
+                      href="https://kantorku.id/daftar/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base px-5 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
+                  >
+                      Coba KantorKu Gratis!
+                  </a>
+                </div>
+
+                {/* Kontainer gambar dibuat lebih lebar untuk memberi ruang overflow */}
+                <div className="shrink-0 relative z-10 w-32 h-40 flex items-center justify-center">
+                  <img
+                    src="/asset-fitur-kantorku.png"
+                    alt="Icon HRIS KantorKu"
+                    className="absolute w-50 h-50 max-w-none -left-13 object-contain"
+                  />
+                </div>
              </div>
           </div>
         </div>
@@ -684,9 +713,9 @@ export default function SeveranceCalculator() {
           
           {/* Rules Table (Already correct) */}
           <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-slate-900 mb-4 text-center">Komponen dan Perhitungan Uang Pesangon</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4 text-center">Komponen dan Perhitungan Uang Pesangon</h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
+              <table className="w-full text-base text-left">
                 <thead className="bg-slate-50 text-slate-500">
                   <tr>
                     <th className="p-3 rounded-l-lg">Komponen</th>
@@ -762,19 +791,19 @@ export default function SeveranceCalculator() {
         
           {/* Section 2: FAQ Dropdown */}
           <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8">
-            <h2 className="text-lg font-bold text-slate-900 mb-4 text-center">Frequently Asked Questions</h2>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 text-center">Frequently Asked Questions</h2>
             <div className="space-y-3"> 
               {FAQ_ITEMS.map((item, index) => (
                 <div key={index} className="border border-slate-200 rounded-xl overflow-hidden">
                   <button
                     onClick={() => toggleFaq(index)}
-                    className="w-full flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors text-left"
+                    className="w-full flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors text-left "
                   >
-                    <h3 className="font-semibold text-slate-800 text-sm pr-4">{item.question}</h3>
+                    <h3 className="font-semibold text-slate-800 text-base pr-4">{item.question}</h3>
                     <ChevronDownIcon className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-200 ${openFaq.includes(index) ? 'rotate-180' : ''}`} />
                   </button>
                   {openFaq.includes(index) && (
-                    <div className="p-4 pt-0 text-sm text-slate-600 bg-white border-t border-slate-50 animate-in fade-in slide-in-from-top-2">
+                    <div className="p-4 pt-0 text-base text-slate-600 bg-white border-t border-slate-50 animate-in fade-in slide-in-from-top-2">
                        <div className="pt-3">
                          {item.answer}
                        </div>
