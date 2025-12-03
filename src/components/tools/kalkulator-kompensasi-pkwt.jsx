@@ -155,7 +155,7 @@ export default function KalkulatorKompensasiPkwt() {
 
             {/* 2. MAIN CONTENT WRAPPER */}
             <main className="-mt-20 max-w-6xl mx-auto px-4 md:px-6 pb-20 relative z-20">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10">
                     {/* LEFT CARD: INPUT FORM */}
                     <div className="lg:col-span-7 bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
                         <div className="p-6 md:p-8">
@@ -272,6 +272,36 @@ export default function KalkulatorKompensasiPkwt() {
                         </div>
                     </div>
                 </div>
+
+                {/* Call to Action Card */}
+                <div className="my-12">
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6 flex items-center gap-6">
+                        <div className="flex-1 space-y-3">
+                            <h3 className="text-lg font-bold text-slate-900 mb-2">
+                                Hitung kompensasi PKWT kini lebih rapi dan pasti
+                            </h3>
+                            <p className="text-base text-slate-700 leading-relaxed mb-4">
+                                Akurasi terjaga setiap langkah berjalan, memudahkan HR menyelesaikan pekerjaan dengan nyaman dan menyeluruh.
+                            </p>
+                            <a
+                                href="https://kantorku.id/daftar/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base px-5 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
+                            >
+                                Coba KantorKu Gratis!
+                            </a>
+                        </div>
+                        <div className="shrink-0 self-center">
+                            <img
+                                src="/asset-fitur-kantorku.png"
+                                alt="Icon HRIS KantorKu"
+                                className="w-40 h-40 object-contain"
+                            />
+                        </div>
+                    </div>
+                </div>
+
 
                 {/* 3. BOTTOM SECTION: INFO & FAQ */}
                 <div className="grid grid-cols-1 gap-6">
