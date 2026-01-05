@@ -371,37 +371,32 @@ export default function SeveranceCalculator() {
   }, []); // Efek ini hanya berjalan sekali saat komponen dimuat
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 font-sans text-slate-900 pb-20">
-      
-      {/* Header */}
-      <div className="w-full bg-[#1E0137] pb-32 pt-12 px-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#28024B] to-[#5E0DC6] opacity-80"></div>
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-        <div className="relative max-w-6xl mx-auto text-center">
-           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm mb-6">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-sm font-medium text-white">Kantorku.id Tool</span>
+    <div className="w-full min-h-screen bg-[#0f0e17]">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-medium text-purple-200 mb-4"><span>KANTORKU HRIS TOOLS</span></div>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">Kalkulator <span className="text-[#FACC15]">Pesangon Karyawan</span></h1>
+            <p className="text-purple-200/80 text-lg mb-6 leading-relaxed">Hitung estimasi pesangon berdasarkan masa kerja dan gaji terakhir sesuai PP No. 35 Tahun 2021.</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Kalkulator Perhitungan Pesangon</h1>
-          <p className="text-purple-100 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            Kalkulator pesangon ini memberikan estimasi terperinci berdasarkan masa kerja dan gaji terakhir, untuk membantu memahami hak yang diatur dalam PP No. 35 Tahun 2021.
-          </p>
+          <div className="hidden md:block bg-[#1e1b4b] border border-white/10 p-6 rounded-2xl shadow-2xl max-w-xs">
+            <div className="text-[10px] font-bold text-purple-300 uppercase tracking-wider mb-3">Terintegrasi Dengan</div>
+            <div className="flex items-center gap-3 mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15]"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+              <span className="text-2xl font-bold text-white">KantorKu HRIS</span>
+            </div>
+            <p className="text-sm text-gray-400 leading-relaxed">Otomatisasi hitung pesangon, payroll, dan PHK langsung dari sistem HR Anda.</p>
+          </div>
         </div>
-      </div>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
         <div className="grid lg:grid-cols-12 gap-8 items-start">
           
           {/* LEFT: INPUT FORM */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden"> 
-              <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-                <h2 className="font-bold text-slate-800 flex items-center gap-2">
-                   DATA KARYAWAN
-                </h2>
-              </div>
+            <div className="bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2"><div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600"><span className="text-sm font-bold">1</span></div>Data Karyawan</h2>
               
-              <div className="p-6 space-y-8">
+              <div className="space-y-8">
 
                 {/* Section 1: Alasan PHK */}
                 <div className="space-y-4">
@@ -600,111 +595,71 @@ export default function SeveranceCalculator() {
             </div>
           </div>
 
-          {/* RIGHT: RESULTS (Static) */}
-          <div className="lg:col-span-5 lg:static lg:top-8 space-y-6">
-            
-            {/* Main Result Card */}
-            <div className="bg-white rounded-2xl shadow-2xl shadow-purple-900/10 border border-slate-100 overflow-hidden relative">
-               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 to-indigo-600"></div>
-               
-               <div className="p-6 bg-slate-50 border-b border-slate-100">
-                  <p className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Estimasi Masa Kerja</p>
-                  <div className="text-2xl font-bold text-slate-800">
-                    {Math.floor(tenureMonths/12)} Tahun <span className="text-slate-400 font-normal">|</span> {tenureMonths%12} Bulan
-                  </div>
-               </div>
+          {/* RIGHT: RESULTS */}
+          <div className="lg:col-span-5 lg:sticky lg:top-8">
+            <div className="bg-[#1e1b4b] border border-white/5 rounded-[2rem] p-6 md:p-8 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16"></div>
+              <h3 className="text-xl font-bold text-white mb-1">Rincian Perhitungan</h3>
+              <p className="text-purple-300 text-sm mb-6 border-b border-white/10 pb-4">Estimasi Masa Kerja: {Math.floor(tenureMonths/12)} Tahun, {tenureMonths%12} Bulan</p>
 
-               <div className="p-6 space-y-5">
-                  {/* UP */}
-                  <div className="flex justify-between items-center pb-4 border-b border-slate-100 border-dashed">
-                     <div>
-                        <p className="text-base font-medium text-slate-600">Uang Pesangon (UP)</p>
-                        <span className="text-sm text-purple-600 font-medium bg-purple-50 px-2 py-0.5 rounded">
-                           {baseUPMonths} x Upah ({currentReason.up}x)
-                        </span>
-                     </div>
-                     <p className="text-lg font-bold text-slate-800">{fmt(UP)}</p>
-                  </div>
-
-                  {/* UPMK */}
-                   <div className="flex justify-between items-center pb-4 border-b border-slate-100 border-dashed">
-                     <div>
-                        <p className="text-base font-medium text-slate-600">Uang Penghargaan Masa Kerja (UPMK)</p>
-                        <span className="text-sm text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded">
-                           {baseUPMKMonths} x Upah ({currentReason.upmk}x)
-                        </span>
-                     </div>
-                     <p className="text-lg font-bold text-slate-800">{fmt(UPMK)}</p>
-                  </div>
-
-                  {/* UPH Breakdown */}
-                  <div className="bg-slate-50 rounded-lg p-4 space-y-2">
-                    <p className="text-sm font-bold text-slate-500 uppercase mb-2">Uang Penggantian Hak (UPH)</p>
-                    <div className="flex justify-between text-base">
-                       <span className="text-slate-600">Cuti ({sisaCuti} hari)</span>
-                       <span className="font-medium">{fmt(cutiValue)}</span>
+              <div className="space-y-3">
+                {/* UP */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold mb-1">Uang Pesangon (UP)</p>
+                      <p className="text-xs text-purple-300/70">{baseUPMonths} x Upah ({currentReason.up}x)</p>
                     </div>
-                    <div className="flex justify-between text-base">
-                       <span className="text-slate-600">Ongkos</span>
-                       <span className="font-medium">{fmt(transportValue)}</span>
-                    </div>
-                    <div className="flex justify-between text-base">
-                       <span className="text-slate-600">Perumahan (15%)</span>
-                       <span className="font-medium">{fmt(housingMedicalValue)}</span>
-                    </div>
+                    <p className="text-lg font-bold text-white">{fmt(UP)}</p>
                   </div>
+                </div>
 
-                  {/* TOTAL */}
-                  <div className="bg-purple-600 rounded-xl p-5 text-white shadow-lg shadow-purple-600/30 mt-2">
-                     <p className="text-base text-purple-100 mb-1">Total Estimasi Kompensasi</p>
-                     <p className="text-4xl font-bold">{fmt(total)}</p>
-                     
-                     {/* UANG PISAH NOTIFICATION */}
-                     {(currentReason.up === 0 && currentReason.upmk === 0) && (
-                       <div className="mt-3 pt-3 border-t border-purple-500/30 text-sm text-purple-100">
-                         <span className="font-bold">Catatan Penting:</span> Karyawan mungkin berhak atas <strong>Uang Pisah</strong>. Besaran Uang Pisah diatur dalam Perjanjian Kerja, Peraturan Perusahaan atau Perjanjian Kerja Bersama.
-                       </div>
-                     )}
+                {/* UPMK */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold mb-1">Uang Penghargaan Masa Kerja (UPMK)</p>
+                      <p className="text-xs text-purple-300/70">{baseUPMKMonths} x Upah ({currentReason.upmk}x)</p>
+                    </div>
+                    <p className="text-lg font-bold text-white">{fmt(UPMK)}</p>
                   </div>
-               </div>
+                </div>
+
+                {/* UPH Breakdown */}
+                <div className="bg-black/20 p-4 rounded-xl border border-white/5">
+                  <p className="text-xs font-bold text-purple-300 uppercase mb-3">Uang Penggantian Hak (UPH)</p>
+                  <div className="space-y-2 text-sm text-gray-400">
+                    <div className="flex justify-between"><span>Cuti ({sisaCuti} hari)</span><span>{fmt(cutiValue)}</span></div>
+                    <div className="flex justify-between"><span>Ongkos Pulang</span><span>{fmt(transportValue)}</span></div>
+                    <div className="flex justify-between"><span>Perumahan (15%)</span><span>{fmt(housingMedicalValue)}</span></div>
+                    <div className="border-t border-white/10 mt-2 pt-2 flex justify-between font-bold text-white"><span>Total UPH</span><span>{fmt(UPH)}</span></div>
+                  </div>
+                </div>
+
+                {/* TOTAL */}
+                <div className="bg-white/10 border border-[#FACC15]/30 rounded-xl p-5 shadow-[0_0_15px_rgba(250,204,21,0.1)]">
+                  <p className="text-[10px] uppercase tracking-wider text-purple-200 mb-1">Total Estimasi Kompensasi</p>
+                  <p className="text-3xl font-bold text-[#FACC15]">{fmt(total)}</p>
+                  
+                  {/* UANG PISAH NOTIFICATION */}
+                  {(currentReason.up === 0 && currentReason.upmk === 0) && (
+                    <div className="mt-3 pt-3 border-t border-[#FACC15]/20 text-xs text-purple-200">
+                      <span className="font-bold">Catatan:</span> Karyawan mungkin berhak atas <strong>Uang Pisah</strong>. Besaran diatur dalam PP/PKB perusahaan.
+                    </div>
+                  )}
+                </div>
+
+                {/* CTA Section */}
+                <div className="mt-6 flex items-start gap-3 p-4 bg-purple-900/30 rounded-xl border border-purple-500/20">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15] shrink-0"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                  <div>
+                    <p className="text-[11px] text-purple-200 leading-relaxed mb-1 font-bold">Ingin proses ini otomatis?</p>
+                    <p className="text-[11px] text-purple-300 leading-relaxed">Gunakan <strong>KantorKu HRIS</strong> untuk integrasi payroll, pesangon, dan PHK yang akurat.</p>
+                    <p className="text-[10px] text-purple-400 mt-3 pt-3 border-t border-purple-500/30 italic">Perhitungan berdasarkan PP No. 35 Tahun 2021.</p>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            {/* Disclaimer */}
-             <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-4 flex gap-3">
-                <InfoIcon />
-                <p className="text-sm text-yellow-800 leading-relaxed">
-                  <strong>Disclaimer:</strong> Hasil perhitungan ini adalah estimasi berdasarkan ketentuan normatif PP No. 35 Tahun 2021.
-                </p>
-             </div>
-
-             {/* Call to Action Card */}
-             <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6 flex items-center gap-6">
-                <div className="flex-1 space-y-3">
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">
-                    Sulit hitung pesangon atau payroll?
-                  </h3>
-                  <p className="text-base text-slate-700 leading-relaxed mb-4">
-                      Biarkan sistem membantu Anda. Akurat, otomatis, dan sesuai peraturan pemerintah.
-                  </p>
-                  <a
-                      href="https://kantorku.id/daftar/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base px-5 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
-                  >
-                      Coba KantorKu Gratis!
-                  </a>
-                </div>
-
-                {/* Kontainer gambar dibuat lebih lebar untuk memberi ruang overflow */}
-                <div className="shrink-0 relative z-10 w-32 h-40 flex items-center justify-center">
-                  <img
-                    src="/asset-fitur-kantorku.png"
-                    alt="Icon HRIS KantorKu"
-                    className="absolute w-50 h-50 max-w-none -left-13 object-contain"
-                  />
-                </div>
-             </div>
           </div>
         </div>
 
@@ -813,9 +768,9 @@ export default function SeveranceCalculator() {
               ))}
             </div>
           </div>
-  </div>
-
-      </main>
+        </div>
+        <div className="mt-12 text-center text-xs text-gray-600 max-w-2xl mx-auto pb-8"><p>Disclaimer: Kalkulator ini adalah alat simulasi. Hasil perhitungan berdasarkan PP No. 35 Tahun 2021. Angka aktual dapat berbeda tergantung kebijakan perusahaan.</p></div>
+      </div>
     </div>
   );
 }

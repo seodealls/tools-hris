@@ -20,7 +20,7 @@ const UsersIcon = () => (
 );
 
 const CalculatorIcon = () => (
-  <svg width="20" height="20" className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+  <svg width="20" height="20" className="w-5 h-5 text-purple-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
   </svg>
 );
@@ -64,38 +64,46 @@ export default function CostPerHireCalculator() {
   }, [adsCost, agencyFees, eventsCost, backgroundCheck, otherExternal, recruiterSalary, referralBonus, softwareCost, otherInternal, totalHires]);
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 font-sans text-slate-900 pb-20">
-      
-      {/* Header Gradient */}
-      <div className="w-full bg-[#1E0137] pb-32 pt-12 px-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#28024B] to-[#5E0DC6] opacity-80"></div>
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
+    <div className="w-full min-h-screen bg-[#0f0e17] font-sans">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-12">
         
-        <div className="relative max-w-6xl mx-auto text-center">
-           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm mb-6">
-            <CalculatorIcon />
-            <span className="text-xs font-medium text-white">Kantorku.id Tool</span>
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Kalkulator Cost Per Hire</h1>
-          <p className="text-purple-100 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-            Hitung rata-rata biaya yang dikeluarkan perusahaan untuk merekrut satu karyawan baru. Metrik penting untuk efisiensi rekrutmen.
-          </p>
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+            <div className="max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-medium text-purple-200 mb-4">
+                    <CalculatorIcon />
+                    <span>KANTORKU HRIS TOOLS</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+                    Kalkulator <span className="text-[#FACC15]">Cost Per Hire</span>
+                </h1>
+                <p className="text-purple-200/80 text-lg mb-6 leading-relaxed">
+                    Hitung rata-rata biaya yang dikeluarkan perusahaan untuk merekrut satu karyawan baru. Metrik penting untuk efisiensi rekrutmen.
+                </p>
+            </div>
+            
+            <div className="hidden md:block bg-[#1e1b4b] border border-white/10 p-6 rounded-2xl shadow-2xl max-w-xs">
+              <div className="text-[10px] font-bold text-purple-300 uppercase tracking-wider mb-3">Terintegrasi Dengan</div>
+              <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 bg-purple-500/20 rounded-lg"><BriefcaseIcon /></div>
+                  <span className="text-2xl font-bold text-white">KantorKu HRIS</span>
+              </div>
+              <p className="text-sm text-gray-400 leading-relaxed">Kelola rekrutmen dan biaya karyawan dalam satu dashboard terintegrasi.</p>
+           </div>
         </div>
-      </div>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* LEFT: INPUT FORM */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-                <h2 className="font-bold text-slate-800 flex items-center gap-2">
-                  <span>📊</span> Komponen Biaya
+          <div className="lg:col-span-7 bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl text-gray-900">
+             
+             <div className="border-b border-slate-100 pb-6 mb-6">
+                <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                  <span className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-lg">📊</span> Komponen Biaya
                 </h2>
-              </div>
+             </div>
               
-              <div className="p-6 space-y-8">
+             <div className="space-y-8">
                 
                 {/* External Costs */}
                 <div className="space-y-4">
@@ -236,74 +244,77 @@ export default function CostPerHireCalculator() {
                 </div>
 
               </div>
-            </div>
           </div>
 
           {/* RIGHT: RESULTS (Sticky) */}
-          <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
-            
-            {/* Main Result Card */}
-            <div className="bg-white rounded-2xl shadow-2xl shadow-purple-900/10 border border-slate-100 overflow-hidden relative">
-               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+          <div className="lg:col-span-5">
+            <div className="bg-[#1e1b4b] border border-white/5 rounded-[2rem] p-6 md:p-8 shadow-2xl relative overflow-hidden sticky top-8">
+               <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16"></div>
                
-               <div className="p-6 bg-slate-50 border-b border-slate-100">
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Metric Utama</p>
-                  <div className="text-xl font-bold text-slate-800">
-                    Cost Per Hire (CPH)
-                  </div>
+               <h3 className="text-xl font-bold text-white mb-1">Rincian Perhitungan</h3>
+               <p className="text-purple-300 text-sm mb-6 border-b border-white/10 pb-4">Analisis Biaya Rekrutmen</p>
+
+                {/* Main Highlight */}
+               <div className="bg-white/10 border border-[#FACC15]/30 rounded-xl p-5 mb-6 shadow-[0_0_15px_rgba(250,204,21,0.1)] text-center">
+                    <p className="text-[10px] uppercase tracking-wider text-purple-200 mb-1">Cost Per Hire (CPH)</p>
+                    <p className="text-4xl sm:text-5xl font-bold text-[#FACC15] tracking-tight">{fmt(calculation.cph)}</p>
+                    <p className="text-xs text-purple-200/70 mt-2">Rata-rata biaya per 1 karyawan</p>
                </div>
 
-               <div className="p-8 flex flex-col items-center justify-center text-center space-y-2">
-                  <div className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
-                    {fmt(calculation.cph)}
-                  </div>
-                  <p className="text-sm text-slate-500">Rata-rata biaya per 1 karyawan</p>
+               <div className="space-y-3">
+                   <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold mb-1">Total Eksternal</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-lg font-bold text-white">{fmt(calculation.totalExternal)}</p>
+                            </div>
+                        </div>
+                   </div>
+                   <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold mb-1">Total Internal</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-lg font-bold text-white">{fmt(calculation.totalInternal)}</p>
+                            </div>
+                        </div>
+                   </div>
+                   
+                   <div className="p-4 bg-purple-900/30 border border-purple-500/20 rounded-xl flex justify-between items-center">
+                      <span className="text-sm font-bold text-white">Total Pengeluaran</span>
+                      <span className="text-sm font-bold text-purple-100">{fmt(calculation.totalCost)}</span>
+                   </div>
                </div>
 
-               {/* Breakdown Table */}
-               <div className="border-t border-slate-100">
-                  <div className="grid grid-cols-2 divide-x divide-slate-100">
-                     <div className="p-4 text-center hover:bg-slate-50 transition">
-                        <p className="text-xs text-slate-500 mb-1">Total Eksternal</p>
-                        <p className="font-bold text-slate-800">{fmt(calculation.totalExternal)}</p>
-                     </div>
-                     <div className="p-4 text-center hover:bg-slate-50 transition">
-                        <p className="text-xs text-slate-500 mb-1">Total Internal</p>
-                        <p className="font-bold text-slate-800">{fmt(calculation.totalInternal)}</p>
-                     </div>
-                  </div>
-                  <div className="p-4 bg-purple-50 border-t border-purple-100 flex justify-between items-center">
-                     <span className="text-sm font-bold text-purple-900">Total Pengeluaran</span>
-                     <span className="text-sm font-bold text-purple-900">{fmt(calculation.totalCost)}</span>
-                  </div>
-               </div>
+               {/* Info Card */}
+               <div className="mt-6 bg-black/20 p-4 rounded-xl border border-white/5">
+                 <h3 className="text-sm font-bold text-white mb-2">Tentang Cost Per Hire</h3>
+                 
+                 <div className="space-y-3 text-xs text-gray-400 leading-relaxed">
+                   <p>
+                     <strong className="text-purple-200">Cost Per Hire (CPH)</strong> adalah salah satu metrik HR terpenting untuk mengukur efisiensi biaya dalam proses akuisisi talenta.
+                   </p>
+                   <div className="bg-white/5 p-3 rounded-lg border border-white/10 font-mono text-[11px] text-purple-200">
+                     Rumus = (Biaya Eksternal + Biaya Internal) / Total Hires
+                   </div>
+                   <ul className="list-disc pl-4 space-y-1 text-gray-400">
+                     <li><strong>Biaya Eksternal:</strong> Pengeluaran untuk vendor luar (iklan, agensi, background check).</li>
+                     <li><strong>Biaya Internal:</strong> Pengeluaran internal (gaji rekruter, biaya sistem, referral).</li>
+                   </ul>
+                   <p className="text-gray-500 italic pt-2">
+                     Semakin rendah CPH dengan kualitas kandidat yang tetap tinggi, semakin efisien proses rekrutmen Anda.
+                   </p>
+                 </div>
+              </div>
+
             </div>
-
-            {/* Info Card */}
-             <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 mb-2">Tentang Cost Per Hire</h3>
-                
-                <div className="space-y-3 text-xs text-slate-600 leading-relaxed">
-                  <p>
-                    <strong>Cost Per Hire (CPH)</strong> adalah salah satu metrik HR terpenting untuk mengukur efisiensi biaya dalam proses akuisisi talenta.
-                  </p>
-                  <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono text-[11px]">
-                    Rumus = (Biaya Eksternal + Biaya Internal) / Total Hires
-                  </div>
-                  <ul className="list-disc pl-4 space-y-1">
-                    <li><strong>Biaya Eksternal:</strong> Pengeluaran untuk vendor luar (iklan, agensi, background check).</li>
-                    <li><strong>Biaya Internal:</strong> Pengeluaran internal (gaji rekruter, biaya sistem, referral).</li>
-                  </ul>
-                  <p className="text-slate-500 italic pt-2">
-                    Semakin rendah CPH dengan kualitas kandidat yang tetap tinggi, semakin efisien proses rekrutmen Anda.
-                  </p>
-                </div>
-             </div>
-
           </div>
         </div>
 
-      </main>
+      </div>
     </div>
   );
 }

@@ -51,10 +51,8 @@ export default function KalkulatorKompensasiPkwt() {
     };
 
     React.useEffect(() => {
-        // 0. Set HTML lang attribute
         document.documentElement.lang = 'id';
 
-        // 1. Canonical Tag
         const canonicalUrl = "https://kantorku.id/tools/kalkulator-kompensasi-pkwt";
         let canonicalLink = document.querySelector("link[rel='canonical']");
 
@@ -67,7 +65,6 @@ export default function KalkulatorKompensasiPkwt() {
             document.head.appendChild(canonicalLink);
         }
 
-        // 2. Robots Tag
         const robotsContent = "index, follow";
         let robotsMeta = document.querySelector("meta[name='robots']");
 
@@ -80,9 +77,7 @@ export default function KalkulatorKompensasiPkwt() {
             document.head.appendChild(robotsMeta);
         }
 
-        return () => {
-            // Opsional: Hapus tag saat komponen di-unmount jika berada dalam SPA
-        };
+        return () => {};
     }, []);
 
     const calculation = useMemo(() => {
@@ -126,8 +121,7 @@ export default function KalkulatorKompensasiPkwt() {
 
 
     return (
-        <div className="text-slate-800 font-sans">
-            {/* Styles */}
+        <div className="w-full min-h-screen bg-[#0f0e17]">
             <style>{`
                 .input-field { transition: all 0.2s; }
                 .input-field:focus { border-color: #7E22CE; box-shadow: 0 0 0 3px rgba(126, 34, 206, 0.1); }
@@ -138,156 +132,151 @@ export default function KalkulatorKompensasiPkwt() {
                 @keyframes sweep { 0% {opacity: 0; transform: translateY(-10px)} 100% {opacity: 1; transform: translateY(0)} }
             `}</style>
 
-            {/* 1. HEADER SECTION */}
-            <div className="bg-header text-white pb-32 pt-10 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #2E0259 0%, #4C0590 100%)' }}>
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-full max-w-4xl bg-purple-500 opacity-20 blur-[100px] pointer-events-none"></div>
-                <div className="max-w-6xl mx-auto px-6 relative z-10 text-center">
-                    <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-1.5 rounded-full backdrop-blur-sm mb-6">
+            <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-12">
+                <div className="max-w-3xl mb-12">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-medium text-purple-200 mb-4">
                         <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
-                        <span className="text-sm font-semibold tracking-wide uppercase">Kantorku.id Tool</span>
+                        <span className="uppercase tracking-wide">Kantorku HRIS Tools</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-3">Kalkulator Perhitungan Kompensasi PKWT</h1>
-                    <p className="text-purple-200 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">Kalkulator Perhitungan <span className="text-[#FACC15]">Kompensasi PKWT</span></h1>
+                    <p className="text-purple-200/80 text-lg leading-relaxed">
                         Kalkulator ini memberikan estimasi terperinci berdasarkan masa kontrak kerja dan gaji terakhir, untuk membantu memahami hak kompensasi sesuai PP No. 35 Tahun 2021.
                     </p>
                 </div>
-            </div>
 
-            {/* 2. MAIN CONTENT WRAPPER */}
-            <main className="-mt-20 max-w-6xl mx-auto px-4 md:px-6 pb-20 relative z-20">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10">
-                    {/* LEFT CARD: INPUT FORM */}
-                    <div className="lg:col-span-7 bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-                        <div className="p-6 md:p-8">
-                            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6">DATA KARYAWAN</h2>
-                            <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+                    <div className="lg:col-span-7 bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl text-gray-900">
+                        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6">DATA KARYAWAN</h2>
+                        <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-500 uppercase mb-2">JENIS KONTRAK KERJA (PKWT)</label>
+                                <div className="relative">
+                                    <select value={contractType} onChange={(e) => setContractType(e.target.value)} className="input-field w-full px-4 py-3 bg-gray-50 border border-transparent rounded-xl text-base font-medium text-gray-700 appearance-none outline-none cursor-pointer focus:bg-white focus:border-purple-500">
+                                        <option value="new">PKWT Baru (Pertama Kali)</option>
+                                        <option value="extension">Perpanjangan PKWT</option>
+                                    </select>
+                                    <div className="absolute right-4 top-3.5 text-gray-400 pointer-events-none"><CaretDownIcon /></div>
+                                </div>
+                            </div>
+
+                            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start">
+                                <InfoIcon />
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-500 uppercase mb-2">JENIS KONTRAK KERJA (PKWT)</label>
-                                    <div className="relative">
-                                        <select value={contractType} onChange={(e) => setContractType(e.target.value)} className="input-field w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-base font-medium text-slate-700 appearance-none outline-none cursor-pointer">
-                                            <option value="new">PKWT Baru (Pertama Kali)</option>
-                                            <option value="extension">Perpanjangan PKWT</option>
-                                        </select>
-                                        <div className="absolute right-4 top-3.5 text-slate-400 pointer-events-none"><CaretDownIcon /></div>
-                                    </div>
+                                    <p className="text-sm font-bold text-gray-800 mb-1">Dasar Hukum & Ketentuan:</p>
+                                    <p className="text-sm text-gray-600 leading-relaxed">
+                                        Pasal 15 PP 35/2021: Pengusaha wajib memberikan uang kompensasi kepada pekerja PKWT pada saat berakhirnya jangka waktu perjanjian kerja. Besaran: (Masa Kerja / 12) x 1 Bulan Upah
+                                    </p>
                                 </div>
+                            </div>
 
-                                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start">
-                                    <InfoIcon />
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-800 mb-1">Dasar Hukum & Ketentuan:</p>
-                                        <p className="text-sm text-slate-600 leading-relaxed">
-                                            Pasal 15 PP 35/2021: Pengusaha wajib memberikan uang kompensasi kepada pekerja PKWT pada saat berakhirnya jangka waktu perjanjian kerja. Besaran: (Masa Kerja / 12) x 1 Bulan Upah
-                                        </p>
-                                    </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-500 uppercase mb-2">TANGGAL MULAI</label>
+                                    <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="input-field w-full px-4 py-3 bg-gray-50 border border-transparent rounded-xl text-base font-medium text-gray-700 outline-none focus:bg-white focus:border-purple-500" required />
                                 </div>
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-500 uppercase mb-2">TANGGAL BERAKHIR</label>
+                                    <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="input-field w-full px-4 py-3 bg-gray-50 border border-transparent rounded-xl text-base font-medium text-gray-700 outline-none focus:bg-white focus:border-purple-500" required />
+                                </div>
+                            </div>
 
+                            <div className="border-t border-gray-100 my-2"></div>
+
+                            <div>
+                                <h3 className="text-sm font-bold text-purple-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                    <MoneyIcon /> KOMPONEN UPAH BULANAN
+                                </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-500 uppercase mb-2">TANGGAL MULAI</label>
-                                        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="input-field w-full px-4 py-3 border border-slate-200 rounded-lg text-base font-medium text-slate-700 outline-none" required />
+                                        <label className="block text-sm font-medium text-gray-500 mb-2">Gaji Pokok + Tunjangan Tetap</label>
+                                        <div className="relative group">
+                                            <span className="absolute left-4 top-3 text-gray-400 font-semibold group-focus-within:text-purple-600">Rp</span>
+                                            <input type="text" inputMode="numeric" value={formatNumberDisplay(salary)} onChange={(e) => setSalary(parseFormattedNumber(e.target.value))} placeholder="0" className="input-field w-full pl-10 pr-4 py-3 bg-gray-50 border border-transparent rounded-xl text-xl font-bold text-gray-800 outline-none placeholder:text-gray-300 focus:bg-white focus:border-purple-500" required />
+                                        </div>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-500 uppercase mb-2">TANGGAL BERAKHIR</label>
-                                        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="input-field w-full px-4 py-3 border border-slate-200 rounded-lg text-base font-medium text-slate-700 outline-none" required />
+                                        <label className="block text-sm font-medium text-gray-400 mb-2">Tunjangan Lain (Opsional/Tidak Tetap)</label>
+                                        <div className="relative">
+                                            <span className="absolute left-4 top-3 text-gray-300 font-semibold">Rp</span>
+                                            <input type="number" disabled placeholder="0" className="w-full pl-10 pr-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-xl font-bold text-gray-400 outline-none cursor-not-allowed" />
+                                        </div>
+                                        <p className="text-xs text-gray-400 mt-1 italic">*Tidak masuk hitungan kompensasi</p>
                                     </div>
                                 </div>
-
-                                <div className="border-t border-slate-100 my-2"></div>
-
-                                <div>
-                                    <h3 className="text-sm font-bold text-purple-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                        <MoneyIcon /> KOMPONEN UPAH BULANAN
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-slate-500 mb-2">Gaji Pokok + Tunjangan Tetap</label>
-                                            <div className="relative group">
-                                                <span className="absolute left-4 top-3 text-slate-400 font-semibold group-focus-within:text-purple-600">Rp</span>
-                                                <input type="text" inputMode="numeric" value={formatNumberDisplay(salary)} onChange={(e) => setSalary(parseFormattedNumber(e.target.value))} placeholder="0" className="input-field w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg text-xl font-bold text-slate-800 outline-none placeholder:text-slate-300" required />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-slate-400 mb-2">Tunjangan Lain (Opsional/Tidak Tetap)</label>
-                                            <div className="relative">
-                                                <span className="absolute left-4 top-3 text-slate-300 font-semibold">Rp</span>
-                                                <input type="number" disabled placeholder="0" className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-lg text-xl font-bold text-slate-400 outline-none cursor-not-allowed" />
-                                            </div>
-                                            <p className="text-xs text-slate-400 mt-1 italic">*Tidak masuk hitungan kompensasi</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
 
-                    {/* RIGHT CARD: RESULT */}
-                    <div className="lg:col-span-5 bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 relative flex flex-col h-full min-h-[400px]">
-                        <div className="h-2 bg-gradient-to-r from-purple-600 to-indigo-600 w-full"></div>
-                        <div className="p-6 md:p-8 flex flex-col h-full">
-                            <div className="mb-8">
-                                <p className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">ESTIMASI MASA KERJA</p>
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-4xl font-extrabold text-slate-900">{calculation.years} Tahun</span>
-                                    <span className="text-4xl font-extrabold text-slate-300 mx-2">|</span>
-                                    <span className="text-4xl font-extrabold text-slate-900">{calculation.months} Bulan</span>
-                                </div>
-                                <p className="text-sm text-slate-400 mt-1">Detail: {calculation.days} Hari berjalan (Total Durasi: {calculation.totalDays} Hari)</p>
-                            </div>
-
-                            <div className="space-y-6 mb-8 flex-grow">
-                                <div>
-                                    <div className="flex justify-between items-end mb-1">
-                                        <span className="text-base font-bold text-slate-700">Kompensasi PKWT</span>
-                                        <span className="text-xl font-bold text-slate-900">{formatRupiah(calculation.compensation)}</span>
+                    <div className="lg:col-span-5 lg:sticky lg:top-8">
+                        <div className="bg-[#1e1b4b] border border-white/5 rounded-[2rem] p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16"></div>
+                            
+                            <div className="relative z-10">
+                                <div className="mb-8">
+                                    <p className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold mb-2">ESTIMASI MASA KERJA</p>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-4xl font-extrabold text-white">{calculation.years} Tahun</span>
+                                        <span className="text-4xl font-extrabold text-white/30 mx-2">|</span>
+                                        <span className="text-4xl font-extrabold text-white">{calculation.months} Bulan</span>
                                     </div>
-                                    <div className="flex justify-between items-center text-sm text-purple-600">
-                                        <span>{calculation.totalMonthsDecimal.toFixed(2)} / 12 x Upah</span>
-                                        <span>(Sesuai PP 35/2021)</span>
+                                    <p className="text-sm text-purple-200/60 mt-1">Detail: {calculation.days} Hari berjalan (Total Durasi: {calculation.totalDays} Hari)</p>
+                                </div>
+
+                                <div className="space-y-4 mb-8">
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                                        <div className="flex justify-between items-end mb-1">
+                                            <span className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold">Kompensasi PKWT</span>
+                                            <span className="text-xl font-bold text-white">{formatRupiah(calculation.compensation)}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-sm text-purple-300">
+                                            <span>{calculation.totalMonthsDecimal.toFixed(2)} / 12 x Upah</span>
+                                            <span>(Sesuai PP 35/2021)</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="border-t border-white/10"></div>
+                                    
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                                        <div className="flex justify-between items-end mb-1">
+                                            <span className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold">Hak Lainnya</span>
+                                            <span className="text-xl font-bold text-white/40">Rp 0</span>
+                                        </div>
+                                        <p className="text-xs text-purple-200/50">Uang Penggantian Hak (Cuti, dll) dihitung terpisah.</p>
                                     </div>
                                 </div>
-                                <div className="border-t border-slate-100"></div>
-                                <div>
-                                    <div className="flex justify-between items-end mb-1">
-                                        <span className="text-base font-medium text-slate-500">Hak Lainnya</span>
-                                        <span className="text-xl font-bold text-slate-400">Rp 0</span>
+
+                                <div className="bg-white/10 border border-[#FACC15]/30 rounded-xl p-5 mb-4 shadow-[0_0_15px_rgba(250,204,21,0.1)]">
+                                    <p className="text-[10px] uppercase tracking-wider text-purple-200 mb-1">TOTAL ESTIMASI DITERIMA</p>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-purple-200/60">Gross (Sebelum Pajak)</span>
+                                        <span className="text-3xl md:text-4xl font-extrabold text-[#FACC15]">{formatRupiah(calculation.compensation)}</span>
                                     </div>
-                                    <p className="text-xs text-slate-400">Uang Penggantian Hak (Cuti, dll) dihitung terpisah.</p>
                                 </div>
-                            </div>
 
-                            <div className="bg-slate-50 rounded-xl p-5 border border-slate-100 mt-auto mb-4">
-                                <p className="text-sm font-bold text-slate-500 uppercase mb-1">TOTAL ESTIMASI DITERIMA</p>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-sm text-slate-400">Gross (Sebelum Pajak)</span>
-                                    <span className="text-3xl md:text-4xl font-extrabold text-purple-700">{formatRupiah(calculation.compensation)}</span>
+                                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4">
+                                    <p className="text-xs text-purple-200/70 leading-relaxed">
+                                        <strong className="text-purple-200">Disclaimer:</strong> Hasil perhitungan ini merupakan estimasi berdasarkan aturan normatif PP No. 35 Tahun 2021. Nilai akhir dapat berbeda tergantung pada perjanjian kerja bersama (PKB), peraturan perusahaan, dan kebijakan perpajakan yang berlaku di masing-masing perusahaan.
+                                    </p>
                                 </div>
-                            </div>
-
-                            <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4">
-                                <p className="text-xs text-slate-500 leading-relaxed">
-                                    <strong>Disclaimer:</strong> Hasil perhitungan ini merupakan estimasi berdasarkan aturan normatif PP No. 35 Tahun 2021. Nilai akhir dapat berbeda tergantung pada perjanjian kerja bersama (PKB), peraturan perusahaan, dan kebijakan perpajakan yang berlaku di masing-masing perusahaan.
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Call to Action Card */}
                 <div className="my-12">
-                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6 flex items-center gap-6">
+                    <div className="bg-[#1e1b4b] border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
                         <div className="flex-1 space-y-3">
-                            <h3 className="text-lg font-bold text-slate-900 mb-2">
+                            <h3 className="text-lg font-bold text-white mb-2">
                                 Hitung kompensasi PKWT kini lebih rapi dan pasti
                             </h3>
-                            <p className="text-base text-slate-700 leading-relaxed mb-4">
+                            <p className="text-base text-purple-200/80 leading-relaxed mb-4">
                                 Akurasi terjaga setiap langkah berjalan, memudahkan HR menyelesaikan pekerjaan dengan nyaman dan menyeluruh.
                             </p>
                             <a
                                 href="https://kantorku.id/daftar/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base px-5 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
+                                className="inline-flex items-center justify-center bg-[#FACC15] hover:bg-yellow-400 text-gray-900 font-semibold text-base px-5 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
                             >
                                 Coba KantorKu Gratis!
                             </a>
@@ -302,36 +291,34 @@ export default function KalkulatorKompensasiPkwt() {
                     </div>
                 </div>
 
-
-                {/* 3. BOTTOM SECTION: INFO & FAQ */}
                 <div className="grid grid-cols-1 gap-6">
-                    <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-700">
                                 <GavelIcon />
                             </div>
-                            <h2 className="text-xl font-bold text-slate-900">Ringkasan Aturan Kompensasi PKWT</h2>
+                            <h2 className="text-xl font-bold text-gray-900">Ringkasan Aturan Kompensasi PKWT</h2>
                         </div>
                         <div className="space-y-4">
                             <div className="flex gap-3">
                                 <CheckCircleIcon />
                                 <div>
-                                    <h3 className="text-base font-bold text-slate-800">Syarat Penerima</h3>
-                                    <p className="text-sm text-slate-600 leading-relaxed mt-1">Diberikan kepada pekerja PKWT yang telah memiliki masa kerja minimal 1 bulan secara terus menerus.</p>
+                                    <h3 className="text-base font-bold text-gray-800">Syarat Penerima</h3>
+                                    <p className="text-sm text-gray-600 leading-relaxed mt-1">Diberikan kepada pekerja PKWT yang telah memiliki masa kerja minimal 1 bulan secara terus menerus.</p>
                                 </div>
                             </div>
                             <div className="flex gap-3">
                                 <CheckCircleIcon />
                                 <div>
-                                    <h3 className="text-base font-bold text-slate-800">Waktu Pemberian</h3>
-                                    <p className="text-sm text-slate-600 leading-relaxed mt-1">Dibayarkan pada saat berakhirnya jangka waktu PKWT sebelum perpanjangan, dan setelah selesai perpanjangan.</p>
+                                    <h3 className="text-base font-bold text-gray-800">Waktu Pemberian</h3>
+                                    <p className="text-sm text-gray-600 leading-relaxed mt-1">Dibayarkan pada saat berakhirnya jangka waktu PKWT sebelum perpanjangan, dan setelah selesai perpanjangan.</p>
                                 </div>
                             </div>
                             <div className="flex gap-3">
                                 <CheckCircleIcon />
                                 <div>
-                                    <h3 className="text-base font-bold text-slate-800">Rumus Perhitungan</h3>
-                                    <p className="text-sm text-slate-600 leading-relaxed mt-1 bg-slate-50 p-2 rounded border border-slate-100 inline-block">
+                                    <h3 className="text-base font-bold text-gray-800">Rumus Perhitungan</h3>
+                                    <p className="text-sm text-gray-600 leading-relaxed mt-1 bg-gray-50 p-2 rounded border border-gray-100 inline-block">
                                         (Masa Kerja / 12) x 1 Bulan Upah
                                     </p>
                                 </div>
@@ -339,134 +326,122 @@ export default function KalkulatorKompensasiPkwt() {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8">
-    <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700">
-            <QuestionIcon />
-        </div>
-        <h2 className="text-xl font-bold text-slate-900">Frequently Asked Question</h2>
-    </div>
+                    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700">
+                                <QuestionIcon />
+                            </div>
+                            <h2 className="text-xl font-bold text-gray-900">Frequently Asked Question</h2>
+                        </div>
 
-    <div className="space-y-3">
+                        <div className="space-y-3">
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Apakah kompensasi kena pajak?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Ya, uang kompensasi PKWT merupakan objek pajak penghasilan (PPh 21). Perusahaan biasanya akan memotong pajak dari jumlah bruto yang diterima.
+                                </div>
+                            </details>
 
-        {/* 1 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Apakah kompensasi kena pajak?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Ya, uang kompensasi PKWT merupakan objek pajak penghasilan (PPh 21). Perusahaan biasanya akan memotong pajak dari jumlah bruto yang diterima.
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Bagaimana jika kontrak diperpanjang?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Pengusaha wajib membayar kompensasi untuk kontrak pertama terlebih dahulu sebelum perpanjangan dimulai. Setelah masa perpanjangan selesai, kompensasi dibayarkan lagi untuk periode tersebut.
+                                </div>
+                            </details>
 
-        {/* 2 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Bagaimana jika kontrak diperpanjang?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Pengusaha wajib membayar kompensasi untuk kontrak pertama terlebih dahulu sebelum perpanjangan dimulai. Setelah masa perpanjangan selesai, kompensasi dibayarkan lagi untuk periode tersebut.
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Apakah jika resign dapat kompensasi?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Ya. Jika salah satu pihak mengakhiri hubungan kerja sebelum kontrak berakhir, pengusaha tetap wajib memberikan kompensasi sesuai jangka waktu PKWT yang telah dijalankan (Pasal 17 PP 35/2021).
+                                </div>
+                            </details>
 
-        {/* 3 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Apakah jika resign dapat kompensasi?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Ya. Jika salah satu pihak mengakhiri hubungan kerja sebelum kontrak berakhir, pengusaha tetap wajib memberikan kompensasi sesuai jangka waktu PKWT yang telah dijalankan (Pasal 17 PP 35/2021).
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Apakah kontrak di bawah 1 bulan dapat kompensasi?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Tidak. Kompensasi PKWT hanya wajib dibayarkan jika masa kerja minimal 1 bulan penuh.
+                                </div>
+                            </details>
 
-        {/* 4 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Apakah kontrak di bawah 1 bulan dapat kompensasi?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Tidak. Kompensasi PKWT hanya wajib dibayarkan jika masa kerja minimal 1 bulan penuh.
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Apa yang terjadi jika kontrak diperbarui lebih dari 1 kali?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Setiap masa kontrak yang berakhir wajib dibayarkan kompensasinya terlebih dahulu. Perusahaan tidak boleh menggabungkan kompensasi beberapa periode menjadi satu.
+                                </div>
+                            </details>
 
-        {/* 5 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Apa yang terjadi jika kontrak diperbarui lebih dari 1 kali?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Setiap masa kontrak yang berakhir wajib dibayarkan kompensasinya terlebih dahulu. Perusahaan tidak boleh menggabungkan kompensasi beberapa periode menjadi satu.
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Jika perusahaan memutus kontrak sepihak, apakah kompensasi berubah?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Tidak. Rumus kompensasi tetap sama yaitu 1 bulan upah × (masa kerja/12), tanpa tambahan penalti kecuali diatur dalam perjanjian.
+                                </div>
+                            </details>
 
-        {/* 6 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Jika perusahaan memutus kontrak sepihak, apakah kompensasi berubah?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Tidak. Rumus kompensasi tetap sama yaitu 1 bulan upah × (masa kerja/12), tanpa tambahan penalti kecuali diatur dalam perjanjian.
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Komponen upah apa saja yang digunakan untuk menghitung kompensasi?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Upah terakhir yang dipakai meliputi gaji pokok + tunjangan tetap. Tunjangan tidak tetap tidak termasuk perhitungan.
+                                </div>
+                            </details>
 
-        {/* 7 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Komponen upah apa saja yang digunakan untuk menghitung kompensasi?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Upah terakhir yang dipakai meliputi gaji pokok + tunjangan tetap. Tunjangan tidak tetap tidak termasuk perhitungan.
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Apakah pekerja paruh waktu (part-time) dapat kompensasi?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Tidak. Kompensasi PKWT hanya berlaku untuk pekerja yang terikat perjanjian kerja PKWT penuh, bukan paruh waktu atau freelance.
+                                </div>
+                            </details>
 
-        {/* 8 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Apakah pekerja paruh waktu (part-time) dapat kompensasi?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Tidak. Kompensasi PKWT hanya berlaku untuk pekerja yang terikat perjanjian kerja PKWT penuh, bukan paruh waktu atau freelance.
-            </div>
-        </details>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Bagaimana jika gaji berubah di tengah kontrak?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Upah yang digunakan adalah upah terakhir saat kontrak berakhir. Jika terjadi kenaikan gaji, kompensasi tetap mengikuti gaji terbaru.
+                                </div>
+                            </details>
 
-        {/* 9 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Bagaimana jika gaji berubah di tengah kontrak?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Upah yang digunakan adalah upah terakhir saat kontrak berakhir. Jika terjadi kenaikan gaji, kompensasi tetap mengikuti gaji terbaru.
-            </div>
-        </details>
-
-        {/* 10 */}
-        <details className="group border border-slate-200 rounded-xl p-2 transition-all open:bg-slate-50">
-            <summary className="flex justify-between items-center font-bold text-base text-slate-800 cursor-pointer p-2">
-                <h3>Apakah kompensasi PKWT boleh dibayarkan sebelum kontrak selesai?</h3>
-                <CaretDownIcon />
-            </summary>
-            <div className="text-sm text-slate-600 leading-relaxed px-2 pb-2 mt-1 border-t border-slate-100 pt-2 group-open:border-slate-200">
-                Tidak boleh. Kompensasi wajib diberikan setelah masa kontrak berakhir atau sebelum perpanjangan dimulai, bukan di tengah masa kontrak.
-            </div>
-        </details>
-
-    </div>
-</div>
+                            <details className="group border border-gray-200 rounded-xl p-2 transition-all open:bg-gray-50">
+                                <summary className="flex justify-between items-center font-bold text-base text-gray-800 cursor-pointer p-2">
+                                    <h3>Apakah kompensasi PKWT boleh dibayarkan sebelum kontrak selesai?</h3>
+                                    <CaretDownIcon />
+                                </summary>
+                                <div className="text-sm text-gray-600 leading-relaxed px-2 pb-2 mt-1 border-t border-gray-100 pt-2 group-open:border-gray-200">
+                                    Tidak boleh. Kompensasi wajib diberikan setelah masa kontrak berakhir atau sebelum perpanjangan dimulai, bukan di tengah masa kontrak.
+                                </div>
+                            </details>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="mt-12 text-center max-w-3xl mx-auto px-6 border-t border-slate-200 pt-8">
-                    <p className="text-sm text-slate-400 mt-2">© 2025 HR Tools Indonesia. Seluruh perhitungan dilakukan di sisi pengguna (Client-side).</p>
+                <div className="mt-12 text-center max-w-3xl mx-auto px-6 border-t border-white/10 pt-8">
+                    <p className="text-sm text-purple-200/50 mt-2">© 2025 HR Tools Indonesia. Seluruh perhitungan dilakukan di sisi pengguna (Client-side).</p>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

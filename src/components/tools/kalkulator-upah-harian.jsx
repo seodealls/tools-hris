@@ -37,9 +37,15 @@ const TrashIcon = ({ className = "w-4 h-4" }) => (
     </svg>
 );
 
-const InfoIcon = ({ className = "w-5 h-5" }) => (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+const BuildingIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15]">
+        <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+        <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+        <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+        <path d="M10 6h4"/>
+        <path d="M10 10h4"/>
+        <path d="M10 14h4"/>
+        <path d="M10 18h4"/>
     </svg>
 );
 
@@ -61,11 +67,9 @@ const CurrencyInput = ({ value, onChange }) => {
 
     return (
         <div>
-            <label htmlFor="wageAmount" className="block text-base font-bold text-slate-700 mb-1">Jumlah Upah *</label>
-            <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                    <span className="text-slate-500 text-base font-medium">Rp</span>
-                </div>
+            <label htmlFor="wageAmount" className="block text-sm font-semibold text-gray-800 mb-1">Jumlah Upah *</label>
+            <div className="relative group">
+                <span className="absolute left-4 top-3.5 text-gray-500 font-bold group-focus-within:text-purple-600 pointer-events-none">Rp</span>
                 <input
                     id="wageAmount"
                     type="text"
@@ -73,30 +77,46 @@ const CurrencyInput = ({ value, onChange }) => {
                     value={displayValue}
                     onChange={handleChange}
                     onFocus={handleFocus}
-                    className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-slate-900 font-medium text-base"
+                    className="w-full pl-10 pr-4 py-3.5 border rounded-xl text-gray-900 font-bold focus:ring-4 focus:ring-purple-100 transition-all outline-none bg-gray-50 border-transparent focus:bg-white focus:border-purple-500"
                 />
             </div>
-            <p className="text-xs text-slate-500 mt-1">Masukkan nominal upah yang Anda terima</p>
+            <p className="text-xs text-gray-500 mt-1">Masukkan nominal upah yang Anda terima</p>
         </div>
     );
 };
 
 const WageTypeToggle = ({ value, onChange }) => (
     <div>
-        <label className="block text-base font-bold text-slate-700 mb-2">Jenis Upah *</label>
-        <div className="flex space-x-2">
+        <label className="block text-sm font-semibold text-gray-800 mb-2">Jenis Upah *</label>
+        <div className="grid grid-cols-2 gap-2 bg-gray-50 p-1 rounded-2xl border border-gray-100">
             <button
                 onClick={() => onChange('daily')}
-                className={`flex-1 py-2.5 px-4 rounded-lg font-bold text-sm transition-all ${value === 'daily' ? 'bg-purple-600 text-white shadow-lg' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                className={`py-3 rounded-xl text-sm font-bold transition-all ${value === 'daily' ? 'bg-white text-purple-700 shadow-sm ring-1 ring-purple-100' : 'text-gray-500 hover:bg-gray-100'}`}
             >
                 Harian
             </button>
             <button
                 onClick={() => onChange('hourly')}
-                className={`flex-1 py-2.5 px-4 rounded-lg font-bold text-sm transition-all ${value === 'hourly' ? 'bg-purple-600 text-white shadow-lg' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                className={`py-3 rounded-xl text-sm font-bold transition-all ${value === 'hourly' ? 'bg-white text-purple-700 shadow-sm ring-1 ring-purple-100' : 'text-gray-500 hover:bg-gray-100'}`}
             >
                 Per Jam
             </button>
+        </div>
+    </div>
+);
+
+const ResultRow = ({ label, value, highlight = false, subtext }) => (
+    <div className={`bg-white/5 border border-white/10 rounded-xl p-4 mb-3 ${highlight ? 'border-[#FACC15]/30 bg-[#FACC15]/5' : ''}`}>
+        <div className="flex justify-between items-start">
+            <div>
+                <p className="text-[10px] uppercase tracking-wider text-purple-200/80 font-bold mb-1">{label}</p>
+                {subtext && <p className="text-xs text-purple-300/70">{subtext}</p>}
+            </div>
+            <div className="text-right">
+                <p className={`text-lg font-bold ${highlight ? 'text-[#FACC15]' : 'text-white'}`}>
+                    {formatCurrency(value)}
+                </p>
+            </div>
         </div>
     </div>
 );
@@ -160,258 +180,209 @@ export default function KalkulatorUpahHarian() {
     const workUnitLabel = wageType === 'daily' ? 'Hari' : 'Jam';
 
     return (
-        <div className="min-h-screen w-full bg-slate-50 font-sans text-slate-900 pb-20">
-            {/* Header */}
-            <div className="w-full bg-[#1E0137] pb-32 pt-12 px-6 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#28024B] to-[#5E0DC6] opacity-80"></div>
-                <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-                <div className="relative max-w-4xl mx-auto text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm mb-6">
-                        <CalculatorIcon />
-                        <span className="text-xs font-medium text-white">HR Calculator Tool</span>
+        <div className="w-full min-h-screen bg-[#0f0e17]">
+            <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-12">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+                    <div className="max-w-2xl">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-medium text-purple-200 mb-4">
+                            <CalculatorIcon className="w-4 h-4" />
+                            <span>KANTORKU HRIS TOOLS</span>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4">
+                            Kalkulator <span className="text-[#FACC15]">Upah Harian/Per Jam</span>
+                        </h1>
+                        <p className="text-purple-200/80 text-lg mb-6 leading-relaxed">
+                            Konversi perhitungan otomatis antara upah harian dan per jam, lengkap dengan proyeksi pendapatan mingguan, bulanan, dan tahunan.
+                        </p>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-                        Kalkulator <span className="text-yellow-400">Upah Harian/Per Jam</span>
-                    </h1>
-                    <p className="text-purple-200 max-w-3xl mx-auto text-sm leading-relaxed">
-                        Konversi perhitungan otomatis antara upah harian dan per jam, lengkap dengan proyeksi pendapatan mingguan, bulanan, dan tahunan.
-                    </p>
+                    <div className="hidden md:block bg-[#1e1b4b] border border-white/10 p-6 rounded-2xl shadow-2xl max-w-xs">
+                        <div className="text-[10px] font-bold text-purple-300 uppercase tracking-wider mb-3">Terintegrasi Dengan</div>
+                        <div className="flex items-center gap-3 mb-3">
+                            <BuildingIcon />
+                            <span className="text-2xl font-bold text-white">KantorKu HRIS</span>
+                        </div>
+                        <p className="text-sm text-gray-400 leading-relaxed">Otomatisasi hitung payroll, BPJS, dan PPh 21 langsung dari sistem HR Anda.</p>
+                    </div>
                 </div>
-            </div>
 
-            <main className="max-w-4xl mx-auto px-4 -mt-16 relative z-10 space-y-8">
-                {/* Input & Results Grid */}
-                <div className="grid md:grid-cols-2 gap-8">
-                    {/* Left: Input */}
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6">
-                            <h2 className="text-2xl font-bold text-slate-800 mb-4">Masukkan Data Upah</h2>
-                            <div className="space-y-6">
+                {/* Main Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Left: Input Cards */}
+                    <div className="lg:col-span-7 space-y-6">
+                        <div className="bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl text-gray-900">
+                            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
+                                    <span className="text-sm font-bold">1</span>
+                                </div>
+                                Masukkan Data Upah
+                            </h2>
+                            <div className="pl-10 space-y-6">
                                 <CurrencyInput value={wageAmount} onChange={setWageAmount} />
                                 <WageTypeToggle value={wageType} onChange={setWageType} />
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6">
-                            <h2 className="text-2xl font-bold text-slate-800 mb-1">Data Hari/Jam Kerja</h2>
-                            <p className="text-sm text-slate-500 mb-4">Tambahkan data kerja untuk menghitung total pendapatan.</p>
-                            <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
-                                {workData.map((value, index) => (
-                                    <div key={index} className="flex items-center space-x-2">
-                                        <div className="relative flex-grow">
-                                            <input
-                                                type="number"
-                                                value={value}
-                                                onChange={(e) => updateWorkEntry(index, e.target.value)}
-                                                className="w-full pl-4 pr-14 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
-                                                placeholder={`Jumlah ${workUnitLabel}`}
-                                            />
-                                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">{workUnitLabel}</span>
+                        <div className="bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl text-gray-900">
+                            <h2 className="text-xl font-bold text-gray-900 mb-1 flex items-center gap-2">
+                                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
+                                    <span className="text-sm font-bold">2</span>
+                                </div>
+                                Data Hari/Jam Kerja
+                            </h2>
+                            <p className="text-sm text-gray-500 mb-4 pl-10">Tambahkan data kerja untuk menghitung total pendapatan.</p>
+                            <div className="pl-10">
+                                <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                                    {workData.map((value, index) => (
+                                        <div key={index} className="flex items-center space-x-2">
+                                            <div className="relative flex-grow">
+                                                <input
+                                                    type="number"
+                                                    value={value}
+                                                    onChange={(e) => updateWorkEntry(index, e.target.value)}
+                                                    className="w-full pl-4 pr-14 py-3.5 bg-gray-50 border-transparent rounded-xl focus:ring-4 focus:ring-purple-100 focus:bg-white focus:border-purple-500 transition-all outline-none font-bold text-gray-900"
+                                                    placeholder={`Jumlah ${workUnitLabel}`}
+                                                />
+                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">{workUnitLabel}</span>
+                                            </div>
+                                            <button onClick={() => removeWorkEntry(index)} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+                                                <TrashIcon />
+                                            </button>
                                         </div>
-                                        <button onClick={() => removeWorkEntry(index)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md">
-                                            <TrashIcon />
-                                        </button>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                                <button onClick={addWorkEntry} className="w-full mt-4 bg-purple-100 text-purple-700 font-bold py-3 px-4 rounded-xl hover:bg-purple-200 transition-all flex items-center justify-center space-x-2">
+                                    <PlusIcon />
+                                    <span>Tambah Data Kerja</span>
+                                </button>
                             </div>
-                             <button onClick={addWorkEntry} className="w-full mt-4 bg-purple-100 text-purple-700 font-bold py-2.5 px-4 rounded-lg hover:bg-purple-200 transition-all flex items-center justify-center space-x-2">
-                                <PlusIcon />
-                                <span>Tambah Data Kerja</span>
-                            </button>
                         </div>
                     </div>
 
                     {/* Right: Results */}
-                     <div className="bg-white rounded-2xl shadow-2xl shadow-purple-900/10 border border-slate-100 p-6">
-                        <h2 className="text-2xl font-bold text-slate-800 mb-4">Hasil Perhitungan</h2>
-                        {wageAmount <= 0 || workData.length === 0 ? (
-                            <div className="text-center py-10">
-                                <p className="text-slate-500">Masukkan data upah untuk melihat hasil.</p>
-                                {workData.length === 0 && <p className="text-slate-400 text-sm mt-1">Tambahkan minimal satu data kerja.</p>}
-                            </div>
-                        ) : (
-                            <div className="space-y-4">
-                                <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
-                                    <p className="text-sm text-purple-800">
-                                        Tarif upah Anda setara dengan <strong>{formatCurrency(wageType === 'daily' ? hourlyRate : dailyRate)}</strong> / {wageType === 'daily' ? 'jam' : 'hari'}.
-                                    </p>
-                                </div>
-                                <div className="bg-slate-50 rounded-lg p-4">
-                                    <p className="text-sm text-slate-600">Total Upah Periode Ini ({totalWorkUnits} {workUnitLabel})</p>
-                                    <p className="text-3xl font-extrabold text-slate-900">{formatCurrency(totalPay)}</p>
-                                </div>
-                                <div className="pt-4 border-t border-slate-100">
-                                    <h3 className="font-bold text-slate-700 mb-2">Proyeksi Pendapatan</h3>
-                                    <div className="space-y-2 text-sm">
-                                        <div className="flex justify-between items-center p-2 rounded hover:bg-slate-50">
-                                            <span className="text-slate-600">Mingguan</span>
-                                            <span className="font-bold text-slate-800">{formatCurrency(weeklyProjection)}</span>
+                    <div className="lg:col-span-5 lg:sticky lg:top-8">
+                        <div className="bg-[#1e1b4b] border border-white/5 rounded-[2rem] p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16"></div>
+                            <h3 className="text-xl font-bold text-white mb-1">Hasil Perhitungan</h3>
+                            <p className="text-purple-300 text-sm mb-6 border-b border-white/10 pb-4">Mode: Upah {wageType === 'daily' ? 'Harian' : 'Per Jam'}</p>
+
+                            <div className="space-y-2">
+                                {wageAmount <= 0 || workData.length === 0 ? (
+                                    <div className="text-center py-10">
+                                        <p className="text-purple-200/80">Masukkan data upah untuk melihat hasil.</p>
+                                        {workData.length === 0 && <p className="text-purple-300/60 text-sm mt-1">Tambahkan minimal satu data kerja.</p>}
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="bg-white/5 border border-purple-500/30 rounded-xl p-4 mb-3">
+                                            <p className="text-xs text-purple-200 mb-1">Tarif upah Anda setara dengan</p>
+                                            <p className="text-lg font-bold text-purple-300">
+                                                {formatCurrency(wageType === 'daily' ? hourlyRate : dailyRate)} / {wageType === 'daily' ? 'jam' : 'hari'}
+                                            </p>
                                         </div>
-                                        <div className="flex justify-between items-center p-2 rounded hover:bg-slate-50">
-                                            <span className="text-slate-600">Bulanan</span>
-                                            <span className="font-bold text-slate-800">{formatCurrency(monthlyProjection)}</span>
+
+                                        <div className="bg-white/10 border border-[#FACC15]/30 rounded-xl p-5 mb-3 mt-2 shadow-[0_0_15px_rgba(250,204,21,0.1)]">
+                                            <p className="text-[10px] uppercase tracking-wider text-purple-200 mb-1">Total Upah Periode Ini ({totalWorkUnits} {workUnitLabel})</p>
+                                            <p className="text-3xl font-bold text-[#FACC15]">{formatCurrency(totalPay)}</p>
                                         </div>
-                                        <div className="flex justify-between items-center p-2 rounded hover:bg-slate-50">
-                                            <span className="text-slate-600">Tahunan</span>
-                                            <span className="font-bold text-slate-800">{formatCurrency(annualProjection)}</span>
+
+                                        <div className="pt-4 border-t border-white/10">
+                                            <h4 className="font-bold text-white mb-3">Proyeksi Pendapatan</h4>
+                                            <ResultRow label="Mingguan" value={weeklyProjection} subtext={`${ASSUMPTIONS.DAYS_PER_WEEK} hari kerja`} />
+                                            <ResultRow label="Bulanan" value={monthlyProjection} subtext={`${ASSUMPTIONS.DAYS_PER_MONTH} hari kerja`} />
+                                            <ResultRow label="Tahunan" value={annualProjection} subtext={`${ASSUMPTIONS.DAYS_PER_YEAR} hari kerja`} highlight />
                                         </div>
+                                    </>
+                                )}
+
+                                <div className="mt-6 flex items-start gap-3 p-4 bg-purple-900/30 rounded-xl border border-purple-500/20">
+                                    <BuildingIcon />
+                                    <div>
+                                        <p className="text-[11px] text-purple-200 leading-relaxed mb-1 font-bold">Ingin proses ini otomatis setiap bulan?</p>
+                                        <p className="text-[11px] text-purple-300 leading-relaxed">Gunakan <strong>KantorKu HRIS</strong> untuk integrasi payroll, absensi, dan pajak yang akurat.</p>
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
 
-                                                                 {/* About Section */}
-
-                                                                 <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 md:p-8">
-
-                                                                     <h2 className="text-2xl font-bold text-slate-800 mb-3">Petunjuk dan Informasi Kalkulator</h2>
-
-                                                                     <p className="text-sm text-slate-600 mb-6 text-justify">
-
-                                                                         Kalkulator ini adalah alat bantu untuk mengonversi upah harian atau per jam ke dalam proyeksi pendapatan mingguan, bulanan, dan tahunan. Tujuannya adalah untuk memberikan estimasi cepat yang dapat membantu Anda dalam perencanaan keuangan.
-
-                                                                     </p>
-
-                                                                     
-
-                                                                     <hr className="my-6 border-slate-200" />
-
-                                                 
-
-                                                                     <div className="space-y-8">
-
-                                                                        <div>
-
-                                                                            <h3 className="text-base font-bold text-slate-700 mb-3">Langkah-langkah Penggunaan</h3>
-
-                                                                            <div className="overflow-hidden border border-slate-200 rounded-lg">
-
-                                                                                <table className="min-w-full text-sm">
-
-                                                                                    <tbody className="bg-white">
-
-                                                                                        <tr className="border-b border-slate-200">
-
-                                                                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">1</td>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 w-1/3">Isi Jumlah Upah</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600">Masukkan nominal upah di kolom yang tersedia.</td>
-
-                                                                                        </tr>
-
-                                                                                        <tr className="border-b border-slate-200">
-
-                                                                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">2</td>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 w-1/3">Tentukan Jenis Upah</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600">Pilih antara "Harian" atau "Per Jam".</td>
-
-                                                                                        </tr>
-
-                                                                                        <tr className="border-b border-slate-200">
-
-                                                                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">3</td>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 w-1/3">Catat Waktu Kerja</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600">Klik "Tambah Data Kerja" untuk memasukkan data jam/hari kerja.</td>
-
-                                                                                        </tr>
-
-                                                                                        <tr>
-
-                                                                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">4</td>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 w-1/3">Lihat Hasil</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600">Proyeksi pendapatan akan langsung ditampilkan di panel hasil.</td>
-
-                                                                                        </tr>
-
-                                                                                    </tbody>
-
-                                                                                </table>
-
-                                                                            </div>
-
-                                                                        </div>
-
-                                                 
-
-                                                                        <div>
-
-                                                                            <h3 className="text-base font-bold text-slate-700 mb-3">Asumsi Perhitungan</h3>
-
-                                                                            <div className="overflow-hidden border border-slate-200 rounded-lg">
-
-                                                                                <table className="min-w-full divide-y divide-slate-200 text-sm">
-
-                                                                                    <tbody className="divide-y divide-slate-200 bg-white">
-
-                                                                                        <tr>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 bg-slate-50 w-1/3 md:w-1/4">Hari Kerja</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600"><strong>{ASSUMPTIONS.HOURS_PER_DAY}</strong> jam</td>
-
-                                                                                        </tr>
-
-                                                                                        <tr>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 bg-slate-50 w-1/3 md:w-1/4">Minggu Kerja</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600"><strong>{ASSUMPTIONS.DAYS_PER_WEEK}</strong> hari</td>
-
-                                                                                        </tr>
-
-                                                                                        <tr>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 bg-slate-50 w-1/3 md:w-1/4">Bulan Kerja</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600"><strong>{ASSUMPTIONS.DAYS_PER_MONTH}</strong> hari</td>
-
-                                                                                        </tr>
-
-                                                                                        <tr>
-
-                                                                                            <td className="px-4 py-3 font-medium text-slate-700 bg-slate-50 w-1/3 md:w-1/4">Tahun Kerja</td>
-
-                                                                                            <td className="px-4 py-3 text-slate-600"><strong>{ASSUMPTIONS.DAYS_PER_YEAR}</strong> hari</td>
-
-                                                                                        </tr>
-
-                                                                                    </tbody>
-
-                                                                                </table>
-
-                                                                            </div>
-
-                                                                            <p className="text-xs text-slate-500 mt-3 italic">
-
-                                                                                *Disclaimer: Angka asumsi ini bersifat umum. Harap sesuaikan dengan kontrak kerja atau kebijakan perusahaan Anda.
-
-                                                                            </p>
-
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                 </div>                 {/* CTA Banner */}
-                <div className="p-8 md:p-10 bg-gradient-to-r from-purple-700 to-indigo-700 rounded-2xl shadow-2xl shadow-purple-900/50 flex flex-col md:flex-row items-center justify-between text-center md:text-left space-y-4 md:space-y-0 md:space-x-8">
-                    <div>
-                        <h2 className="text-xl font-bold text-white leading-snug">Kelola Payroll dengan KantorKu HRIS</h2>
-                        <p className="text-sm text-purple-200 mt-1">Gunakan sistem KantorKu HRIS untuk mengelola perhitungan upah, gaji, dan payroll karyawan secara otomatis dan akurat.</p>
-                    </div>
-                    <div className="flex-shrink-0 flex space-x-3">
-                        <a href="#" onClick={(e) => e.preventDefault()} className="px-4 py-2 text-sm font-semibold rounded-lg text-indigo-900 bg-white shadow-md hover:bg-purple-100 transition-colors duration-200">Coba Demo Gratis</a>
-                        <a href="#" onClick={(e) => e.preventDefault()} className="px-4 py-2 text-sm font-semibold rounded-lg text-white bg-white/20 hover:bg-white/30 transition">Hubungi Sales</a>
+                {/* About Section */}
+                <div className="mt-12 bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl text-gray-900">
+                    <h2 className="text-xl font-bold text-gray-900 mb-3">Petunjuk dan Informasi Kalkulator</h2>
+                    <p className="text-sm text-gray-600 mb-6 text-justify">
+                        Kalkulator ini adalah alat bantu untuk mengonversi upah harian atau per jam ke dalam proyeksi pendapatan mingguan, bulanan, dan tahunan. Tujuannya adalah untuk memberikan estimasi cepat yang dapat membantu Anda dalam perencanaan keuangan.
+                    </p>
+
+                    <hr className="my-6 border-gray-200" />
+
+                    <div className="space-y-8">
+                        <div>
+                            <h3 className="text-base font-bold text-gray-700 mb-3">Langkah-langkah Penggunaan</h3>
+                            <div className="overflow-hidden border border-gray-200 rounded-xl">
+                                <table className="min-w-full text-sm">
+                                    <tbody className="bg-white">
+                                        <tr className="border-b border-gray-200">
+                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">1</td>
+                                            <td className="px-4 py-3 font-medium text-gray-700 w-1/3">Isi Jumlah Upah</td>
+                                            <td className="px-4 py-3 text-gray-600">Masukkan nominal upah di kolom yang tersedia.</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">2</td>
+                                            <td className="px-4 py-3 font-medium text-gray-700 w-1/3">Tentukan Jenis Upah</td>
+                                            <td className="px-4 py-3 text-gray-600">Pilih antara "Harian" atau "Per Jam".</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">3</td>
+                                            <td className="px-4 py-3 font-medium text-gray-700 w-1/3">Catat Waktu Kerja</td>
+                                            <td className="px-4 py-3 text-gray-600">Klik "Tambah Data Kerja" untuk memasukkan data jam/hari kerja.</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-3 py-3 font-bold text-purple-800 bg-purple-50 text-center w-12">4</td>
+                                            <td className="px-4 py-3 font-medium text-gray-700 w-1/3">Lihat Hasil</td>
+                                            <td className="px-4 py-3 text-gray-600">Proyeksi pendapatan akan langsung ditampilkan di panel hasil.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className="text-base font-bold text-gray-700 mb-3">Asumsi Perhitungan</h3>
+                            <div className="overflow-hidden border border-gray-200 rounded-xl">
+                                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                                    <tbody className="divide-y divide-gray-200 bg-white">
+                                        <tr>
+                                            <td className="px-4 py-3 font-medium text-gray-700 bg-gray-50 w-1/3 md:w-1/4">Hari Kerja</td>
+                                            <td className="px-4 py-3 text-gray-600"><strong>{ASSUMPTIONS.HOURS_PER_DAY}</strong> jam</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-3 font-medium text-gray-700 bg-gray-50 w-1/3 md:w-1/4">Minggu Kerja</td>
+                                            <td className="px-4 py-3 text-gray-600"><strong>{ASSUMPTIONS.DAYS_PER_WEEK}</strong> hari</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-3 font-medium text-gray-700 bg-gray-50 w-1/3 md:w-1/4">Bulan Kerja</td>
+                                            <td className="px-4 py-3 text-gray-600"><strong>{ASSUMPTIONS.DAYS_PER_MONTH}</strong> hari</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-3 font-medium text-gray-700 bg-gray-50 w-1/3 md:w-1/4">Tahun Kerja</td>
+                                            <td className="px-4 py-3 text-gray-600"><strong>{ASSUMPTIONS.DAYS_PER_YEAR}</strong> hari</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-3 italic">
+                                *Disclaimer: Angka asumsi ini bersifat umum. Harap sesuaikan dengan kontrak kerja atau kebijakan perusahaan Anda.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </main>
+
+                {/* Disclaimer */}
+                <div className="mt-12 text-center text-xs text-gray-600 max-w-2xl mx-auto pb-8">
+                    <p>Disclaimer: Kalkulator ini adalah alat simulasi. Angka aktual dapat berbeda tergantung kebijakan perusahaan.</p>
+                </div>
+            </div>
         </div>
     );
 }
