@@ -7,40 +7,40 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
  */
 
 const FORMAT_CURRENCY = (value) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(value);
 };
 
 const FORMAT_NUMBER_INPUT = (value) => {
-  if (value === 0 || value === '') return '';
-  return new Intl.NumberFormat('id-ID').format(value);
+    if (value === 0 || value === '') return '';
+    return new Intl.NumberFormat('id-ID').format(value);
 };
 
 const CAP_BPJS_KESEHATAN = 12000000;
 const CAP_BPJS_JP = 10547400;
 
 const JKK_RATES = [
-  { label: 'Sangat Rendah', value: 0.10 },
-  { label: 'Rendah', value: 0.40 },
-  { label: 'Sedang', value: 0.75 },
-  { label: 'Tinggi', value: 1.13 },
-  { label: 'Sangat Tinggi', value: 1.60 },
+    { label: 'Sangat Rendah', value: 0.10 },
+    { label: 'Rendah', value: 0.40 },
+    { label: 'Sedang', value: 0.75 },
+    { label: 'Tinggi', value: 1.13 },
+    { label: 'Sangat Tinggi', value: 1.60 },
 ];
 
-const PTKP_VALUES = { 
-  'TK/0': 54000000, 'TK/1': 58500000, 'K/0': 58500000, 
-  'TK/2': 63000000, 'TK/3': 67500000, 'K/1': 63000000, 'K/2': 67500000, 
-  'K/3': 72000000 
+const PTKP_VALUES = {
+    'TK/0': 54000000, 'TK/1': 58500000, 'K/0': 58500000,
+    'TK/2': 63000000, 'TK/3': 67500000, 'K/1': 63000000, 'K/2': 67500000,
+    'K/3': 72000000
 };
 
 // --- TER LAYERS (PP 58/2023) ---
-const TER_A_LAYERS = [{max:5400000,rate:0},{max:5650000,rate:0.0025},{max:5950000,rate:0.005},{max:6300000,rate:0.0075},{max:6750000,rate:0.01},{max:7500000,rate:0.0125},{max:8550000,rate:0.015},{max:9650000,rate:0.0175},{max:10050000,rate:0.02},{max:10350000,rate:0.0225},{max:10700000,rate:0.025},{max:11050000,rate:0.03},{max:11600000,rate:0.035},{max:12500000,rate:0.04},{max:13750000,rate:0.05},{max:15100000,rate:0.06},{max:16950000,rate:0.07},{max:19750000,rate:0.08},{max:24150000,rate:0.09},{max:26450000,rate:0.1},{max:28000000,rate:0.11},{max:30050000,rate:0.12},{max:32400000,rate:0.13},{max:35400000,rate:0.14},{max:39100000,rate:0.15},{max:43850000,rate:0.16},{max:47800000,rate:0.17},{max:51400000,rate:0.18},{max:56300000,rate:0.19},{max:62200000,rate:0.2},{max:68600000,rate:0.21},{max:77500000,rate:0.22},{max:89000000,rate:0.23},{max:103000000,rate:0.24},{max:125000000,rate:0.25},{max:157000000,rate:0.26},{max:206000000,rate:0.27},{max:337000000,rate:0.28},{max:454000000,rate:0.29},{max:550000000,rate:0.3},{max:695000000,rate:0.31},{max:910000000,rate:0.32},{max:1400000000,rate:0.33},{max:Infinity,rate:0.34}];
-const TER_B_LAYERS = [{max:6200000,rate:0},{max:6500000,rate:0.0025},{max:6850000,rate:0.005},{max:7300000,rate:0.0075},{max:9200000,rate:0.01},{max:10750000,rate:0.015},{max:11250000,rate:0.02},{max:11600000,rate:0.025},{max:12600000,rate:0.03},{max:13600000,rate:0.04},{max:14950000,rate:0.05},{max:16400000,rate:0.06},{max:18450000,rate:0.07},{max:21850000,rate:0.08},{max:26000000,rate:0.09},{max:27700000,rate:0.1},{max:29350000,rate:0.11},{max:31450000,rate:0.12},{max:33950000,rate:0.13},{max:37100000,rate:0.14},{max:41100000,rate:0.15},{max:45800000,rate:0.16},{max:49500000,rate:0.17},{max:53800000,rate:0.18},{max:58500000,rate:0.19},{max:64000000,rate:0.2},{max:71000000,rate:0.21},{max:80000000,rate:0.22},{max:93000000,rate:0.23},{max:109000000,rate:0.24},{max:129000000,rate:0.25},{max:163000000,rate:0.26},{max:211000000,rate:0.27},{max:374000000,rate:0.28},{max:459000000,rate:0.29},{max:555000000,rate:0.3},{max:704000000,rate:0.31},{max:957000000,rate:0.32},{max:1405000000,rate:0.33},{max:Infinity,rate:0.34}];
-const TER_C_LAYERS = [{max:6600000,rate:0},{max:6950000,rate:0.0025},{max:7350000,rate:0.005},{max:7800000,rate:0.0075},{max:8850000,rate:0.01},{max:9800000,rate:0.0125},{max:10950000,rate:0.015},{max:11200000,rate:0.0175},{max:12050000,rate:0.02},{max:12950000,rate:0.03},{max:14150000,rate:0.04},{max:15550000,rate:0.05},{max:17050000,rate:0.06},{max:19500000,rate:0.07},{max:22700000,rate:0.08},{max:26600000,rate:0.09},{max:28100000,rate:0.1},{max:30100000,rate:0.11},{max:32600000,rate:0.12},{max:35400000,rate:0.13},{max:38900000,rate:0.14},{max:43000000,rate:0.15},{max:47400000,rate:0.16},{max:51200000,rate:0.17},{max:55800000,rate:0.18},{max:60400000,rate:0.19},{max:66700000,rate:0.2},{max:74500000,rate:0.21},{max:83200000,rate:0.22},{max:95600000,rate:0.23},{max:110000000,rate:0.24},{max:134000000,rate:0.25},{max:169000000,rate:0.26},{max:221000000,rate:0.27},{max:390000000,rate:0.28},{max:463000000,rate:0.29},{max:561000000,rate:0.3},{max:709000000,rate:0.31},{max:965000000,rate:0.32},{max:1419000000,rate:0.33},{max:Infinity,rate:0.34}];
+const TER_A_LAYERS = [{ max: 5400000, rate: 0 }, { max: 5650000, rate: 0.0025 }, { max: 5950000, rate: 0.005 }, { max: 6300000, rate: 0.0075 }, { max: 6750000, rate: 0.01 }, { max: 7500000, rate: 0.0125 }, { max: 8550000, rate: 0.015 }, { max: 9650000, rate: 0.0175 }, { max: 10050000, rate: 0.02 }, { max: 10350000, rate: 0.0225 }, { max: 10700000, rate: 0.025 }, { max: 11050000, rate: 0.03 }, { max: 11600000, rate: 0.035 }, { max: 12500000, rate: 0.04 }, { max: 13750000, rate: 0.05 }, { max: 15100000, rate: 0.06 }, { max: 16950000, rate: 0.07 }, { max: 19750000, rate: 0.08 }, { max: 24150000, rate: 0.09 }, { max: 26450000, rate: 0.1 }, { max: 28000000, rate: 0.11 }, { max: 30050000, rate: 0.12 }, { max: 32400000, rate: 0.13 }, { max: 35400000, rate: 0.14 }, { max: 39100000, rate: 0.15 }, { max: 43850000, rate: 0.16 }, { max: 47800000, rate: 0.17 }, { max: 51400000, rate: 0.18 }, { max: 56300000, rate: 0.19 }, { max: 62200000, rate: 0.2 }, { max: 68600000, rate: 0.21 }, { max: 77500000, rate: 0.22 }, { max: 89000000, rate: 0.23 }, { max: 103000000, rate: 0.24 }, { max: 125000000, rate: 0.25 }, { max: 157000000, rate: 0.26 }, { max: 206000000, rate: 0.27 }, { max: 337000000, rate: 0.28 }, { max: 454000000, rate: 0.29 }, { max: 550000000, rate: 0.3 }, { max: 695000000, rate: 0.31 }, { max: 910000000, rate: 0.32 }, { max: 1400000000, rate: 0.33 }, { max: Infinity, rate: 0.34 }];
+const TER_B_LAYERS = [{ max: 6200000, rate: 0 }, { max: 6500000, rate: 0.0025 }, { max: 6850000, rate: 0.005 }, { max: 7300000, rate: 0.0075 }, { max: 9200000, rate: 0.01 }, { max: 10750000, rate: 0.015 }, { max: 11250000, rate: 0.02 }, { max: 11600000, rate: 0.025 }, { max: 12600000, rate: 0.03 }, { max: 13600000, rate: 0.04 }, { max: 14950000, rate: 0.05 }, { max: 16400000, rate: 0.06 }, { max: 18450000, rate: 0.07 }, { max: 21850000, rate: 0.08 }, { max: 26000000, rate: 0.09 }, { max: 27700000, rate: 0.1 }, { max: 29350000, rate: 0.11 }, { max: 31450000, rate: 0.12 }, { max: 33950000, rate: 0.13 }, { max: 37100000, rate: 0.14 }, { max: 41100000, rate: 0.15 }, { max: 45800000, rate: 0.16 }, { max: 49500000, rate: 0.17 }, { max: 53800000, rate: 0.18 }, { max: 58500000, rate: 0.19 }, { max: 64000000, rate: 0.2 }, { max: 71000000, rate: 0.21 }, { max: 80000000, rate: 0.22 }, { max: 93000000, rate: 0.23 }, { max: 109000000, rate: 0.24 }, { max: 129000000, rate: 0.25 }, { max: 163000000, rate: 0.26 }, { max: 211000000, rate: 0.27 }, { max: 374000000, rate: 0.28 }, { max: 459000000, rate: 0.29 }, { max: 555000000, rate: 0.3 }, { max: 704000000, rate: 0.31 }, { max: 957000000, rate: 0.32 }, { max: 1405000000, rate: 0.33 }, { max: Infinity, rate: 0.34 }];
+const TER_C_LAYERS = [{ max: 6600000, rate: 0 }, { max: 6950000, rate: 0.0025 }, { max: 7350000, rate: 0.005 }, { max: 7800000, rate: 0.0075 }, { max: 8850000, rate: 0.01 }, { max: 9800000, rate: 0.0125 }, { max: 10950000, rate: 0.015 }, { max: 11200000, rate: 0.0175 }, { max: 12050000, rate: 0.02 }, { max: 12950000, rate: 0.03 }, { max: 14150000, rate: 0.04 }, { max: 15550000, rate: 0.05 }, { max: 17050000, rate: 0.06 }, { max: 19500000, rate: 0.07 }, { max: 22700000, rate: 0.08 }, { max: 26600000, rate: 0.09 }, { max: 28100000, rate: 0.1 }, { max: 30100000, rate: 0.11 }, { max: 32600000, rate: 0.12 }, { max: 35400000, rate: 0.13 }, { max: 38900000, rate: 0.14 }, { max: 43000000, rate: 0.15 }, { max: 47400000, rate: 0.16 }, { max: 51200000, rate: 0.17 }, { max: 55800000, rate: 0.18 }, { max: 60400000, rate: 0.19 }, { max: 66700000, rate: 0.2 }, { max: 74500000, rate: 0.21 }, { max: 83200000, rate: 0.22 }, { max: 95600000, rate: 0.23 }, { max: 110000000, rate: 0.24 }, { max: 134000000, rate: 0.25 }, { max: 169000000, rate: 0.26 }, { max: 221000000, rate: 0.27 }, { max: 390000000, rate: 0.28 }, { max: 463000000, rate: 0.29 }, { max: 561000000, rate: 0.3 }, { max: 709000000, rate: 0.31 }, { max: 965000000, rate: 0.32 }, { max: 1419000000, rate: 0.33 }, { max: Infinity, rate: 0.34 }];
 
 const GET_TER_RATE = (bruto, category) => {
     let layers = [];
@@ -53,7 +53,7 @@ const GET_TER_RATE = (bruto, category) => {
 };
 
 const DETERMINE_TER_CATEGORY = (ptkp) => {
-    const map = { 'TK/0':'A', 'TK/1':'A', 'K/0':'A', 'TK/2':'B', 'TK/3':'B', 'K/1':'B', 'K/2':'B', 'K/3':'C' };
+    const map = { 'TK/0': 'A', 'TK/1': 'A', 'K/0': 'A', 'TK/2': 'B', 'TK/3': 'B', 'K/1': 'B', 'K/2': 'B', 'K/3': 'C' };
     return map[ptkp] || 'A';
 };
 
@@ -63,14 +63,14 @@ const DETERMINE_TER_CATEGORY = (ptkp) => {
  * ------------------------------------------------------------------
  */
 const Icons = {
-    Calculator: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>,
-    Building: () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15]"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>,
-    ChevronDown: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6"/></svg>,
-    Check: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 6 9 17l-5-5"/></svg>,
-    Users: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-    Clock: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-    Briefcase: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
-    Info: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    Calculator: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></svg>,
+    Building: () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15]"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path d="M10 6h4" /><path d="M10 10h4" /><path d="M10 14h4" /><path d="M10 18h4" /></svg>,
+    ChevronDown: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6" /></svg>,
+    Check: ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 6 9 17l-5-5" /></svg>,
+    Users: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>,
+    Clock: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>,
+    Briefcase: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>,
+    Info: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
 };
 
 /**
@@ -83,8 +83,8 @@ const TunjanganInput = ({ label, value, onChange, isFixed, onToggleFixed }) => {
     const [displayValue, setDisplayValue] = useState(FORMAT_NUMBER_INPUT(value));
     useEffect(() => { setDisplayValue(FORMAT_NUMBER_INPUT(value)); }, [value]);
     const handleChange = (e) => {
-        const rawValue = e.target.value.replace(/\./g, ''); 
-        if (!/^\d*$/.test(rawValue)) return; 
+        const rawValue = e.target.value.replace(/\./g, '');
+        if (!/^\d*$/.test(rawValue)) return;
         const numValue = rawValue === '' ? 0 : parseInt(rawValue, 10);
         setDisplayValue(FORMAT_NUMBER_INPUT(numValue));
         onChange(numValue);
@@ -114,8 +114,8 @@ const FormattedInput = ({ label, value, onChange, placeholder, disabled, subtext
     const [displayValue, setDisplayValue] = useState(FORMAT_NUMBER_INPUT(value));
     useEffect(() => { setDisplayValue(FORMAT_NUMBER_INPUT(value)); }, [value]);
     const handleChange = (e) => {
-        const rawValue = e.target.value.replace(/\./g, ''); 
-        if (!/^\d*$/.test(rawValue)) return; 
+        const rawValue = e.target.value.replace(/\./g, '');
+        if (!/^\d*$/.test(rawValue)) return;
         const numValue = rawValue === '' ? 0 : parseInt(rawValue, 10);
         setDisplayValue(FORMAT_NUMBER_INPUT(numValue));
         onChange(numValue);
@@ -132,7 +132,7 @@ const FormattedInput = ({ label, value, onChange, placeholder, disabled, subtext
     );
 };
 
-const RegularInput = ({ label, value, onChange, type="text", subtext, placeholder }) => (
+const RegularInput = ({ label, value, onChange, type = "text", subtext, placeholder }) => (
     <div className="mb-5">
         {label && <label className="block text-sm font-semibold text-gray-800 mb-1">{label}</label>}
         <input type={type} className="w-full px-4 py-3.5 border rounded-xl text-gray-900 font-bold focus:ring-4 focus:ring-purple-100 transition-all outline-none bg-gray-50 border-transparent focus:bg-white focus:border-purple-500" placeholder={placeholder} value={value} onChange={onChange} />
@@ -154,12 +154,12 @@ const SelectInput = ({ label, value, onChange, options, subtext }) => (
 );
 
 const SelectionButton = ({ label, active, onClick, icon: Icon }) => (
-    <button onClick={onClick} className={`flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all border border-transparent shadow-sm w-full ${active ? 'bg-[#6d4afe] text-white shadow-purple-500/30 transform scale-[1.02]' : 'bg-white text-gray-500 border-gray-200 hover:border-purple-300 hover:bg-purple-50'}`}>
+    <button onClick={onClick} className={`flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all border border-transparent shadow-sm w-full ${active ? 'bg-purple-600 text-white shadow-purple-500/30 transform scale-[1.02]' : 'bg-white text-gray-500 border-gray-200 hover:border-purple-300 hover:bg-purple-50'}`}>
         {Icon && <Icon />} {label}
     </button>
 );
 
-const ToggleSwitch = ({ label, checked, onChange, colorClass = 'bg-green-500' }) => (
+const ToggleSwitch = ({ label, checked, onChange, colorClass = 'bg-purple-600' }) => (
     <div className="flex items-center justify-between py-2 cursor-pointer group" onClick={() => onChange(!checked)}>
         <label className="text-sm font-semibold text-gray-800 cursor-pointer group-hover:text-purple-700 transition-colors flex items-center gap-2">{label}</label>
         <div className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${checked ? colorClass : 'bg-gray-300'}`}>
@@ -170,7 +170,7 @@ const ToggleSwitch = ({ label, checked, onChange, colorClass = 'bg-green-500' })
 
 const CheckboxTile = ({ label, checked, onChange }) => (
     <div onClick={() => onChange(!checked)} className={`cursor-pointer border rounded-xl px-3 py-2.5 text-xs font-bold flex items-center justify-between transition-all ${checked ? 'bg-purple-50 border-purple-500 text-purple-700 ring-1 ring-purple-500' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
-        {label} {checked && <Icons.Check className="text-purple-600"/>}
+        {label} {checked && <Icons.Check className="text-purple-600" />}
     </div>
 );
 
@@ -199,16 +199,16 @@ const ResultRow = ({ label, value, highlight = false, isNegative = false, subtex
 export default function KalkulatorGaji() {
     const [activeTab, setActiveTab] = useState('fulltime');
     const resultsRef = useRef(null);
-    
+
     const [kawinStatus, setKawinStatus] = useState('TK');
     const [tanggungan, setTanggungan] = useState(0);
-    
+
     const [salaryData, setSalaryData] = useState({
-        basicSalary: 0, 
+        basicSalary: 0,
         // Tunjangan (Val, IsFixed)
         tunjTransport: { val: 0, fixed: false },
         tunjMakan: { val: 0, fixed: false },
-        tunjLembur: { val: 0, fixed: false }, 
+        tunjLembur: { val: 0, fixed: false },
         tunjBonus: { val: 0, fixed: false },
         tunjTetapLain: 0,
         tunjTidakTetapLain: 0,
@@ -219,10 +219,10 @@ export default function KalkulatorGaji() {
         unpaidLeave: false, unpaidLeaveDays: 0, unpaidLeaveTotalWorkDays: 25,
         useBpjsKesehatan: false, useBpjsKetenagakerjaan: false,
         bpjsProgram: { jht: true, jkk: true, jkm: true, jp: true, jkp: true },
-        jkkRiskLevel: 0.10, 
-        taxMethod: 'gross', 
+        jkkRiskLevel: 0.10,
+        taxMethod: 'gross',
     });
-    
+
     const [showAllowances, setShowAllowances] = useState(false);
     const ptkpStatusCombined = `${kawinStatus}/${tanggungan}`;
 
@@ -259,24 +259,24 @@ export default function KalkulatorGaji() {
     }, [activeTab]);
 
     const updateData = (key, value) => setSalaryData(prev => ({ ...prev, [key]: value }));
-    const updateTunjanganVal = (key, val) => setSalaryData(prev => ({...prev, [key]: {...prev[key], val: val}}));
-    const updateTunjanganFixed = (key, fixed) => setSalaryData(prev => ({...prev, [key]: {...prev[key], fixed: fixed}}));
+    const updateTunjanganVal = (key, val) => setSalaryData(prev => ({ ...prev, [key]: { ...prev[key], val: val } }));
+    const updateTunjanganFixed = (key, fixed) => setSalaryData(prev => ({ ...prev, [key]: { ...prev[key], fixed: fixed } }));
     const updateBpjsProgram = (key, value) => setSalaryData(prev => ({ ...prev, bpjsProgram: { ...prev.bpjsProgram, [key]: value } }));
 
     // Calculations
     const results = useMemo(() => {
-        let grossIncome = 0; 
+        let grossIncome = 0;
         let fixedWage = 0; // For BPJS Basis
 
         // 1. Basic & Fixed Calculation
         if (activeTab === 'fulltime') {
-            grossIncome = salaryData.basicSalary; 
+            grossIncome = salaryData.basicSalary;
             fixedWage = salaryData.basicSalary;
             if (salaryData.unpaidLeave && salaryData.unpaidLeaveDays > 0) {
                 const divisor = salaryData.unpaidLeaveTotalWorkDays || 25;
                 const cut = (salaryData.basicSalary / divisor) * salaryData.unpaidLeaveDays;
                 grossIncome -= cut;
-                fixedWage -= cut; 
+                fixedWage -= cut;
             }
         } else if (activeTab === 'parttime') {
             grossIncome = salaryData.hourlyRate * salaryData.hoursPerDay * salaryData.daysPerMonth;
@@ -303,11 +303,11 @@ export default function KalkulatorGaji() {
         grossIncome += totalAllowances;
 
         // Add Fixed Allowances to Fixed Wage (BPJS Basis)
-        if(salaryData.tunjTransport.fixed) fixedWage += tTransport;
-        if(salaryData.tunjMakan.fixed) fixedWage += tMakan;
-        
+        if (salaryData.tunjTransport.fixed) fixedWage += tTransport;
+        if (salaryData.tunjMakan.fixed) fixedWage += tMakan;
+
         // Lembur & Bonus are assumed Variable (Not Fixed) for BPJS
-        
+
         fixedWage += tTetapLain;
 
         // BPJS Basis Logic
@@ -340,10 +340,10 @@ export default function KalkulatorGaji() {
         let terCategory = 'A'; let terRate = 0;
         let totalBpjsCompany = 0;
 
-        if (activeTab !== 'intern') { 
+        if (activeTab !== 'intern') {
             totalBpjsCompany = bpjsKes_Comp + bpjsTk_Jkk_Comp + bpjsTk_Jkm_Comp;
-            grossForTax += totalBpjsCompany; 
-            
+            grossForTax += totalBpjsCompany;
+
             terCategory = DETERMINE_TER_CATEGORY(ptkpStatusCombined);
             terRate = GET_TER_RATE(grossForTax, terCategory);
             pph21 = Math.floor(grossForTax * terRate);
@@ -402,8 +402,8 @@ export default function KalkulatorGaji() {
                                             <div className="mt-4 pt-4 border-t border-gray-200 animate-fade-in">
                                                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Metode Hitung</label>
                                                 <div className="flex gap-4 mb-4">
-                                                    <label className="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="im" checked={salaryData.internMethod === 'prorata'} onChange={() => updateData('internMethod', 'prorata')} className="accent-purple-600"/> Prorata</label>
-                                                    <label className="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="im" checked={salaryData.internMethod === 'deduction'} onChange={() => updateData('internMethod', 'deduction')} className="accent-purple-600"/> Potong Absen</label>
+                                                    <label className="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="im" checked={salaryData.internMethod === 'prorata'} onChange={() => updateData('internMethod', 'prorata')} className="accent-purple-600" /> Prorata</label>
+                                                    <label className="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="im" checked={salaryData.internMethod === 'deduction'} onChange={() => updateData('internMethod', 'deduction')} className="accent-purple-600" /> Potong Absen</label>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <RegularInput label="Total Hari Kerja" type="number" value={salaryData.internTotalDays} onChange={(e) => updateData('internTotalDays', parseFloat(e.target.value))} />
@@ -424,10 +424,10 @@ export default function KalkulatorGaji() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 bg-purple-50/50 p-4 rounded-xl border border-purple-100 animate-fade-in mt-2">
                                         <TunjanganInput label="Transport" value={salaryData.tunjTransport.val} isFixed={salaryData.tunjTransport.fixed} onChange={(v) => updateTunjanganVal('tunjTransport', v)} onToggleFixed={(f) => updateTunjanganFixed('tunjTransport', f)} />
                                         <TunjanganInput label="Makan" value={salaryData.tunjMakan.val} isFixed={salaryData.tunjMakan.fixed} onChange={(v) => updateTunjanganVal('tunjMakan', v)} onToggleFixed={(f) => updateTunjanganFixed('tunjMakan', f)} />
-                                        
+
                                         {activeTab !== 'intern' && <FormattedInput className="mb-5" label="Lembur" value={salaryData.tunjLembur.val} onChange={(v) => updateTunjanganVal('tunjLembur', v)} />}
                                         <FormattedInput className="mb-5" label={activeTab === 'intern' ? "Bonus" : "Bonus/THR"} value={salaryData.tunjBonus.val} onChange={(v) => updateTunjanganVal('tunjBonus', v)} />
-                                        
+
                                         <FormattedInput label="Tunjangan Tetap Lainnya" value={salaryData.tunjTetapLain} onChange={(v) => updateData('tunjTetapLain', v)} />
                                         <FormattedInput label="Tunjangan Tidak Tetap Lainnya" value={salaryData.tunjTidakTetapLain} onChange={(v) => updateData('tunjTidakTetapLain', v)} />
                                     </div>
@@ -447,7 +447,7 @@ export default function KalkulatorGaji() {
                                             {activeTab !== 'intern' && (<><CheckboxTile label="JHT" checked={salaryData.bpjsProgram.jht} onChange={(v) => updateBpjsProgram('jht', v)} /><CheckboxTile label="JP" checked={salaryData.bpjsProgram.jp} onChange={(v) => updateBpjsProgram('jp', v)} /><CheckboxTile label="JKP" checked={salaryData.bpjsProgram.jkp} onChange={(v) => updateBpjsProgram('jkp', v)} /></>)}
                                             <CheckboxTile label="JKK" checked={salaryData.bpjsProgram.jkk} onChange={(v) => updateBpjsProgram('jkk', v)} /><CheckboxTile label="JKM" checked={salaryData.bpjsProgram.jkm} onChange={(v) => updateBpjsProgram('jkm', v)} />
                                         </div>
-                                        {salaryData.bpjsProgram.jkk && <SelectInput label="Risiko Kecelakaan Kerja (JKK)" value={salaryData.jkkRiskLevel} onChange={(e) => updateData('jkkRiskLevel', parseFloat(e.target.value))} options={JKK_RATES.map(r => ({label: `${r.label} (${r.value}%)`, value: r.value}))} />}
+                                        {salaryData.bpjsProgram.jkk && <SelectInput label="Risiko Kecelakaan Kerja (JKK)" value={salaryData.jkkRiskLevel} onChange={(e) => updateData('jkkRiskLevel', parseFloat(e.target.value))} options={JKK_RATES.map(r => ({ label: `${r.label} (${r.value}%)`, value: r.value }))} />}
                                     </div>
                                 )}
                             </div>
@@ -480,7 +480,7 @@ export default function KalkulatorGaji() {
                                         </div>
                                     </div>
                                     <div className="bg-gray-50 rounded-xl p-4 border border-purple-100 flex items-center gap-4 animate-fade-in">
-                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-purple-600"><Icons.Check className="w-5 h-5"/></div>
+                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-purple-600"><Icons.Check className="w-5 h-5" /></div>
                                         <div><p className="text-sm font-bold text-gray-900">Status PTKP: {ptkpStatusCombined}</p><p className="text-sm text-gray-500">Penghasilan Tidak Kena Pajak: <span className="font-semibold text-gray-700">{FORMAT_CURRENCY(PTKP_VALUES[ptkpStatusCombined] || 0)}</span></p></div>
                                     </div>
                                     <div className="flex justify-between items-center">
@@ -504,7 +504,7 @@ export default function KalkulatorGaji() {
 
                             <div className="space-y-2 animate-fade-in">
                                 <ResultRow label="Gaji Bruto / Gross" value={results.grossIncome} />
-                                
+
                                 {activeTab !== 'intern' && results.totalBpjsCompany > 0 && (
                                     <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-3 border-l-4 border-l-purple-500">
                                         <div className="flex justify-between items-start mb-2">
@@ -516,9 +516,9 @@ export default function KalkulatorGaji() {
                                 )}
 
                                 {activeTab !== 'intern' && (
-                                    <ResultRow label="PPh 21 (TER Bulanan)" value={results.taxMethod === 'net' ? 0 : results.pph21} isNegative subtext={`Kat. ${results.terCategory} (${(results.terRate*100).toFixed(2)}%) dari Objek Pajak`} />
+                                    <ResultRow label="PPh 21 (TER Bulanan)" value={results.taxMethod === 'net' ? 0 : results.pph21} isNegative subtext={`Kat. ${results.terCategory} (${(results.terRate * 100).toFixed(2)}%) dari Objek Pajak`} />
                                 )}
-                                
+
                                 {salaryData.useBpjsKesehatan && activeTab !== 'intern' && <ResultRow label="BPJS Kesehatan" value={results.bpjs.kes_emp} isNegative subtext="1% dari Gaji Pokok + Tunjangan Tetap" />}
                                 {salaryData.useBpjsKetenagakerjaan && activeTab !== 'intern' && (<>{salaryData.bpjsProgram.jht && <ResultRow label="JHT Karyawan" value={results.bpjs.tk_jht_emp} isNegative subtext="2% dari Gaji Pokok + Tunjangan Tetap" />}{salaryData.bpjsProgram.jp && <ResultRow label="JP Karyawan" value={results.bpjs.tk_jp_emp} isNegative subtext="1% dari Gaji Pokok + Tunjangan Tetap" />}</>)}
                                 {salaryData.deductionOther > 0 && <ResultRow label="Potongan Lain" value={salaryData.deductionOther} isNegative />}

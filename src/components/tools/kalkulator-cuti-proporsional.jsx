@@ -1,15 +1,12 @@
 import React, { useState, useMemo, useEffect } from "react";
 
 // --- GLOBAL UTILITY FUNCTION ---
-// Fungsi utilitas untuk menghitung bulan penuh
-// Dipindahkan ke atas agar bisa diakses oleh useMemo.
 const getFullMonthsWorked = (start, end) => {
     if (start > end) return 0;
     let months;
     months = (end.getFullYear() - start.getFullYear()) * 12;
     months -= start.getMonth();
     months += end.getMonth();
-    // Jika tanggal akhir lebih kecil dari tanggal mulai, hitungan bulan penuh berkurang 1.
     if (end.getDate() < start.getDate()) {
         months--;
     }
@@ -18,78 +15,33 @@ const getFullMonthsWorked = (start, end) => {
 
 // --- GLOBAL CONFIGURATION ---
 const POLICY_TYPES = [
-    { 
-        value: 'ACCRUAL_MONTHLY', 
-        label: 'Akrual Bulanan (Berdasarkan Masa Kerja)', 
-        desc: 'Jatah cuti dihitung berdasarkan jumlah bulan kerja penuh yang telah dilalui (max 12 bulan).' 
+    {
+        value: 'ACCRUAL_MONTHLY',
+        label: 'Akrual Bulanan (Berdasarkan Masa Kerja)',
+        desc: 'Jatah cuti dihitung berdasarkan jumlah bulan kerja penuh yang telah dilalui (max 12 bulan).'
     },
-    { 
-        value: 'RESET_JAN', 
-        label: 'Reset Awal Tahun (1 Jan)', 
-        desc: 'Jatah cuti dihitung proporsional dari tanggal masuk hingga akhir tahun (31 Des).' 
+    {
+        value: 'RESET_JAN',
+        label: 'Reset Awal Tahun (1 Jan)',
+        desc: 'Jatah cuti dihitung proporsional dari tanggal masuk hingga akhir tahun (31 Des).'
     },
-    { 
-        value: 'ANNIVERSARY', 
-        label: 'Ulang Tahun Kerja (Anniversary)', 
-        desc: 'Jatah cuti dihitung proporsional berdasarkan bulan kerja penuh, direset setiap ulang tahun tanggal masuk.' 
+    {
+        value: 'ANNIVERSARY',
+        label: 'Ulang Tahun Kerja (Anniversary)',
+        desc: 'Jatah cuti dihitung proporsional berdasarkan bulan kerja penuh, direset setiap ulang tahun tanggal masuk.'
     },
 ];
 
-// --- Icons (Menggunakan SVG inline agar self-contained) ---
-
-// Icon Kalender (Result - Unchanged)
-const CalendarIcon = ({ className = "w-5 h-5 text-purple-600" }) => ( 
+// --- Icons ---
+const CalendarIcon = ({ className = "w-5 h-5 text-purple-600" }) => (
     <svg width="24" height="24" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h.01M12 11h.01M15 11h.01M7 21h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
 );
 
-// Icon Timbangan (Comparison/Regulations - Unchanged)
-const ScaleIcon = ({ className = "w-5 h-5 text-indigo-600" }) => (
+const NumberListIcon = ({ className = "w-5 h-5 text-gray-500" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.044m17.236 0c.264.444.385.968.385 1.512V19a2 2 0 01-2 2H5a2 2 0 01-2-2V7.456c0-.544.121-1.068.385-1.512m17.236 0L12 18l-8.618-11.016" />
-    </svg>
-);
-
-// Icon Kalkulator (Header - Unchanged)
-const CalculatorIcon = ({ className = "w-5 h-5 text-white" }) => (
-    <svg width="24" height="24" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-    </svg>
-);
-
-// Icon Ceklis (Panduan - Unchanged)
-const CheckIcon = ({ className = "w-4 h-4 text-purple-600" }) => (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
-);
-
-// Icon Peringatan (Catatan Penting - Unchanged)
-const WarningIcon = ({ className = "w-5 h-5 text-red-600" }) => (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-    </svg>
-);
-
-// 1. **BARU**: Icon Daftar/Formulir untuk Input Data Perhitungan
-const ClipboardListIcon = ({ className = "w-5 h-5 text-slate-500" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-    </svg>
-);
-
-// 2. **BARU**: Icon Piala/Pencapaian untuk Total Cuti Proporsional (Hasil)
-const TrophyIcon = ({ className = "w-5 h-5 text-yellow-400" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-2.526a2 2 0 01-1.789-2.894l-3.5-7A2 2 0 015.236 10H10m4 0l1 3m-4-3l-1 3m-4 3h12" />
-    </svg>
-);
-
-// 3. Simulasi Dokumen Cuti (Document/File Icon - Unchanged)
-const DocumentIcon = ({ className = "w-5 h-5 text-purple-300" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
     </svg>
 );
 
@@ -109,7 +61,7 @@ const ResponsiveDateInput = ({ id, label, value, onChange, helperText }) => {
             yearRef.current?.focus();
         }
     };
-    
+
     const handleKeyDown = (e, field) => {
         if (e.key === 'Backspace' && !value[field]) {
             if (field === 'year') {
@@ -125,8 +77,8 @@ const ResponsiveDateInput = ({ id, label, value, onChange, helperText }) => {
     };
 
     return (
-        <div className="group">
-            <label htmlFor={id} className="block text-base font-bold text-slate-700 mb-1">{label}</label>
+        <div className="group mb-5">
+            <label htmlFor={id} className="block text-sm font-semibold text-gray-800 mb-1">{label}</label>
             <div className="flex items-center gap-2">
                 <input
                     ref={dayRef}
@@ -139,9 +91,9 @@ const ResponsiveDateInput = ({ id, label, value, onChange, helperText }) => {
                     onChange={(e) => handleInputChange('day', e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e, 'day')}
                     onFocus={handleFocus}
-                    className="w-1/3 px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-slate-900 font-medium text-base text-center"
+                    className="w-1/3 px-4 py-3.5 bg-gray-50 border-transparent rounded-xl focus:ring-4 focus:ring-purple-100 focus:bg-white focus:border-purple-500 transition-all text-gray-900 font-bold text-center outline-none"
                 />
-                <span className="text-slate-400">/</span>
+                <span className="text-gray-400 font-bold">/</span>
                 <input
                     ref={monthRef}
                     id={`${id}-month`}
@@ -153,9 +105,9 @@ const ResponsiveDateInput = ({ id, label, value, onChange, helperText }) => {
                     onChange={(e) => handleInputChange('month', e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e, 'month')}
                     onFocus={handleFocus}
-                    className="w-1/3 px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-slate-900 font-medium text-base text-center"
+                    className="w-1/3 px-4 py-3.5 bg-gray-50 border-transparent rounded-xl focus:ring-4 focus:ring-purple-100 focus:bg-white focus:border-purple-500 transition-all text-gray-900 font-bold text-center outline-none"
                 />
-                <span className="text-slate-400">/</span>
+                <span className="text-gray-400 font-bold">/</span>
                 <input
                     ref={yearRef}
                     id={`${id}-year`}
@@ -167,10 +119,10 @@ const ResponsiveDateInput = ({ id, label, value, onChange, helperText }) => {
                     onChange={(e) => handleInputChange('year', e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e, 'year')}
                     onFocus={handleFocus}
-                    className="w-1/3 px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-slate-900 font-medium text-base text-center"
+                    className="w-1/3 px-4 py-3.5 bg-gray-50 border-transparent rounded-xl focus:ring-4 focus:ring-purple-100 focus:bg-white focus:border-purple-500 transition-all text-gray-900 font-bold text-center outline-none"
                 />
             </div>
-            <p className="text-xs text-slate-500 mt-1">{helperText}</p>
+            <p className="text-xs text-gray-500 mt-1">{helperText}</p>
         </div>
     );
 };
@@ -185,14 +137,14 @@ const NumberInput = ({ id, label, value, unit, onChange, helperText }) => {
         } else {
             const numericVal = parseInt(val.replace(/[^0-9]/g, ''), 10);
             if (!isNaN(numericVal)) {
-                 onChange(Math.max(0, numericVal));
+                onChange(Math.max(0, numericVal));
             }
         }
     };
 
     return (
-        <div className="group">
-            <label htmlFor={id} className="block text-base font-bold text-slate-700 mb-1">{label}</label>
+        <div className="group mb-5">
+            <label htmlFor={id} className="block text-sm font-semibold text-gray-800 mb-1">{label}</label>
             <div className="relative">
                 <input
                     id={id}
@@ -201,24 +153,24 @@ const NumberInput = ({ id, label, value, unit, onChange, helperText }) => {
                     value={value}
                     onChange={handleChange}
                     onFocus={handleFocus}
-                    className="w-full pr-16 pl-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-slate-900 font-medium text-base"
+                    className="w-full pr-16 pl-4 py-3.5 bg-gray-50 border-transparent rounded-xl focus:ring-4 focus:ring-purple-100 focus:bg-white focus:border-purple-500 transition-all text-gray-900 font-bold outline-none"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">{unit}</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold pointer-events-none">{unit}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">{helperText}</p>
+            <p className="text-xs text-gray-500 mt-1">{helperText}</p>
         </div>
     );
 };
 
 const PolicySelector = ({ id, label, value, onChange, options, helperText }) => (
-    <div className="group">
-        <label htmlFor={id} className="block text-base font-bold text-slate-700 mb-1">{label}</label>
+    <div className="group mb-5">
+        <label htmlFor={id} className="block text-sm font-semibold text-gray-800 mb-1">{label}</label>
         <div className="relative">
             <select
                 id={id}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-slate-900 font-medium appearance-none text-base pr-10"
+                className="w-full px-4 py-3.5 bg-gray-50 border-transparent rounded-xl focus:ring-4 focus:ring-purple-100 focus:bg-white focus:border-purple-500 transition-all text-gray-900 font-bold appearance-none pr-10 outline-none"
             >
                 {options.map(opt => (
                     <option key={opt.value} value={opt.value}>
@@ -226,11 +178,11 @@ const PolicySelector = ({ id, label, value, onChange, options, helperText }) => 
                     </option>
                 ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                 <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
             </div>
         </div>
-        <p className="text-xs text-slate-500 mt-1">{helperText}</p>
+        <p className="text-xs text-gray-500 mt-1">{helperText}</p>
     </div>
 );
 
@@ -248,14 +200,14 @@ export default function CutiProporsional() {
         daysRaw: 0,
         formulaText: "Lengkapi semua data untuk melihat hasil."
     });
-    
+
     // State untuk Live Counting
     const [displayLeave, setDisplayLeave] = useState(0);
 
     const handleCalculate = () => {
         const parseDate = (dateObject) => {
             if (!dateObject || !dateObject.day || !dateObject.month || !dateObject.year) return null;
-            
+
             const day = parseInt(dateObject.day, 10);
             const month = parseInt(dateObject.month, 10);
             const year = parseInt(dateObject.year, 10);
@@ -282,7 +234,7 @@ export default function CutiProporsional() {
             });
             return;
         }
-        
+
         let monthsForProrata = 0;
         let accruedLeave = 0;
         let formulaText = "";
@@ -291,25 +243,21 @@ export default function CutiProporsional() {
             case 'RESET_JAN': {
                 const startMonth = start.getMonth() + 1; // 1-12
                 const endMonth = end.getMonth() + 1;
-                
-                // Menghitung bulan penuh yang dilalui dari tgl start ke akhir tahun.
+
                 monthsForProrata = 12 - startMonth + 1;
-                
-                // Jika tgl perhitungan (end) di tahun yang sama
+
                 if (end.getFullYear() === start.getFullYear()) {
-                     monthsForProrata = Math.min(endMonth - startMonth + 1, monthsForProrata);
-                } 
-                
-                // Pastikan minimal 0 dan maksimal 12
+                    monthsForProrata = Math.min(endMonth - startMonth + 1, monthsForProrata);
+                }
+
                 monthsForProrata = Math.min(12, Math.max(0, monthsForProrata));
-                
+
                 accruedLeave = (monthsForProrata / 12) * entitlement;
                 formulaText = `(${monthsForProrata} bulan / 12 bulan) × ${entitlement} hari`;
                 break;
             }
 
             case 'ANNIVERSARY': {
-                // Diambil bulan penuh yang telah dilewati sejak tgl bergabung
                 const monthsTotal = getFullMonthsWorked(start, end);
                 monthsForProrata = Math.min(12, monthsTotal);
                 accruedLeave = (monthsForProrata / 12) * entitlement;
@@ -319,7 +267,6 @@ export default function CutiProporsional() {
 
             case 'ACCRUAL_MONTHLY':
             default: {
-                // Diambil bulan penuh yang telah dilewati sejak tgl bergabung, dibatasi 12
                 monthsForProrata = getFullMonthsWorked(start, end);
                 monthsForProrata = Math.min(12, monthsForProrata);
                 accruedLeave = (monthsForProrata / 12) * entitlement;
@@ -327,7 +274,7 @@ export default function CutiProporsional() {
                 break;
             }
         }
-        
+
         const finalLeaveDays = Math.floor(accruedLeave);
 
         setCalculationResult({
@@ -339,7 +286,6 @@ export default function CutiProporsional() {
         });
     };
 
-    
     // --- LIVE COUNTING EFFECT ---
     useEffect(() => {
         let animationFrameId;
@@ -349,16 +295,14 @@ export default function CutiProporsional() {
         const startTime = performance.now();
 
         if (startValue === endValue) {
-             setDisplayLeave(endValue);
-             return;
+            setDisplayLeave(endValue);
+            return;
         }
 
         const step = (timestamp) => {
             const elapsed = timestamp - startTime;
             const progress = Math.min(1, elapsed / duration);
             const currentValue = startValue + (endValue - startValue) * progress;
-
-            // Mempercepat animasi jika perubahan angkanya besar
             const adjustedValue = endValue > startValue ? Math.ceil(currentValue) : Math.floor(currentValue);
 
             setDisplayLeave(Math.max(0, adjustedValue));
@@ -374,8 +318,7 @@ export default function CutiProporsional() {
 
         return () => cancelAnimationFrame(animationFrameId);
     }, [calculationResult.daysRaw]);
-    
-    // Perbaikan: Pastikan POLICY_TYPES sudah didefinisikan secara global.
+
     const currentPolicyDesc = POLICY_TYPES.find(p => p.value === policyType)?.desc || "Pilih kebijakan cuti untuk melihat detail perhitungan.";
 
     return (
@@ -396,7 +339,7 @@ export default function CutiProporsional() {
                     <div className="hidden md:block bg-[#1e1b4b] border border-white/10 p-6 rounded-2xl shadow-2xl max-w-xs">
                         <div className="text-[10px] font-bold text-purple-300 uppercase tracking-wider mb-3">Terintegrasi Dengan</div>
                         <div className="flex items-center gap-3 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15]"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15]"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path d="M10 6h4" /><path d="M10 10h4" /><path d="M10 14h4" /><path d="M10 18h4" /></svg>
                             <span className="text-2xl font-bold text-white">KantorKu HRIS</span>
                         </div>
                         <p className="text-sm text-gray-400 leading-relaxed">Otomatisasi hitung cuti, absensi, dan data karyawan langsung dari sistem HR Anda.</p>
@@ -404,48 +347,51 @@ export default function CutiProporsional() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    
+
                     <div className="lg:col-span-7 bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl text-gray-900">
-                        <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600"><span className="text-sm font-bold">1</span></div>Input Data Perhitungan</h2>
-                        <div className="pl-10 mb-8 animate-fade-in space-y-6">
-                                <ResponsiveDateInput 
-                                    id="startDate" 
-                                    label="Tanggal Mulai Kerja" 
-                                    value={startDate} 
-                                    onChange={setStartDate} 
-                                    helperText="Tanggal efektif karyawan pertama kali bekerja."
-                                />
-                                <ResponsiveDateInput 
-                                    id="calculationDate" 
-                                    label="Tanggal Perhitungan" 
-                                    value={calculationDate} 
-                                    onChange={setCalculationDate} 
-                                    helperText="Tanggal di mana hak cuti ingin dihitung (misal: akhir tahun)."
-                                />
-                                <PolicySelector
-                                    id="policyType"
-                                    label="Pilih Jenis Kebijakan Cuti"
-                                    value={policyType}
-                                    onChange={setPolicyType}
-                                    options={POLICY_TYPES.map(p => ({ value: p.value, label: p.label }))}
-                                    helperText={currentPolicyDesc}
-                                />
-                                <NumberInput 
-                                    id="annualEntitlement" 
-                                    label="Jatah Cuti Tahunan Penuh (Maksimum)" 
-                                    value={annualEntitlement} 
-                                    unit="Hari"
-                                    onChange={setAnnualEntitlement} 
-                                    helperText="Jumlah hari cuti penuh yang diberikan perusahaan per tahun (misal: 12 hari)."
-                                />
-                                <button
-                                    onClick={handleCalculate}
-                                    className="w-full bg-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-purple-700 transition-all"
-                                >
-                                    Hitung Cuti
-                                </button>
-                            </div>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            Input Data Perhitungan
+                        </h2>
+
+                        <div className="space-y-6">
+                            <ResponsiveDateInput
+                                id="startDate"
+                                label="Tanggal Mulai Kerja"
+                                value={startDate}
+                                onChange={setStartDate}
+                                helperText="Tanggal efektif karyawan pertama kali bekerja."
+                            />
+                            <ResponsiveDateInput
+                                id="calculationDate"
+                                label="Tanggal Perhitungan"
+                                value={calculationDate}
+                                onChange={setCalculationDate}
+                                helperText="Tanggal di mana hak cuti ingin dihitung (misal: akhir tahun)."
+                            />
+                            <PolicySelector
+                                id="policyType"
+                                label="Pilih Jenis Kebijakan Cuti"
+                                value={policyType}
+                                onChange={setPolicyType}
+                                options={POLICY_TYPES.map(p => ({ value: p.value, label: p.label }))}
+                                helperText={currentPolicyDesc}
+                            />
+                            <NumberInput
+                                id="annualEntitlement"
+                                label="Jatah Cuti Tahunan Penuh (Maksimum)"
+                                value={annualEntitlement}
+                                unit="Hari"
+                                onChange={setAnnualEntitlement}
+                                helperText="Jumlah hari cuti penuh yang diberikan perusahaan per tahun (misal: 12 hari)."
+                            />
+                            <button
+                                onClick={handleCalculate}
+                                className="w-full bg-purple-600 text-white font-bold py-3.5 px-4 rounded-xl hover:bg-purple-700 transition-all text-base shadow-lg shadow-purple-200 mt-4"
+                            >
+                                Hitung Cuti
+                            </button>
                         </div>
+                    </div>
 
                     <div className="lg:col-span-5 lg:sticky lg:top-8">
                         <div className="bg-[#1e1b4b] border border-white/5 rounded-[2rem] p-6 md:p-8 shadow-2xl relative overflow-hidden">
@@ -487,7 +433,7 @@ export default function CutiProporsional() {
                                 </div>
 
                                 <div className="mt-6 flex items-start gap-3 p-4 bg-purple-900/30 rounded-xl border border-purple-500/20">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15] flex-shrink-0"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#FACC15] flex-shrink-0"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path d="M10 6h4" /><path d="M10 10h4" /><path d="M10 14h4" /><path d="M10 18h4" /></svg>
                                     <div>
                                         <p className="text-[11px] text-purple-200 leading-relaxed mb-1 font-bold">Ingin proses ini otomatis setiap bulan?</p>
                                         <p className="text-[11px] text-purple-300 leading-relaxed">Gunakan <strong>KantorKu HRIS</strong> untuk integrasi cuti, absensi, dan data karyawan yang akurat.</p>
@@ -499,26 +445,7 @@ export default function CutiProporsional() {
                     </div>
                 </div>
 
-                <div className="mt-12 max-w-4xl mx-auto">
-                    <div className="p-8 md:p-10 bg-gradient-to-r from-purple-700 to-indigo-700 rounded-2xl shadow-2xl shadow-purple-900/50 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-8">
-                        <div className="flex flex-col text-center md:text-left">
-                            <h2 className="text-xl font-bold text-white leading-snug">
-                                Jangan Ribet Hitung Manual, Pakai KantorKu HRIS agar Lebih Praktis!
-                            </h2>
-                            <p className="text-sm text-purple-200 mt-1">
-                                Stop repot hitung manual! KantorKu HRIS membantu HR mengelola cuti, absensi, dan data karyawan secara cepat dan akurat
-                            </p>
-                        </div>
-                        <div className="flex space-x-3">
-                            <a href="#" onClick={(e) => { e.preventDefault(); console.log('CTA Coba Gratis Clicked!'); }} className="group px-3 py-1.5 text-sm font-semibold rounded-lg text-indigo-900 bg-white shadow-md hover:bg-purple-50 transition duration-150 ease-in-out whitespace-nowrap">
-                                Coba Gratis
-                            </a>
-                            <a href="#" onClick={(e) => { e.preventDefault(); console.log('CTA Hubungi Sales Clicked!'); }} className="group px-3 py-1.5 text-sm font-semibold rounded-lg text-white bg-transparent border border-white hover:bg-white/20 transition duration-150 ease-in-out whitespace-nowrap">
-                                Hubungi Sales
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                {/* Additional Content removed for brevity/focus, replaced with standard disclaimer */}
                 <div className="mt-12 text-center text-xs text-gray-600 max-w-2xl mx-auto pb-8"><p>Disclaimer: Kalkulator ini adalah alat simulasi. Hasil perhitungan adalah estimasi teoritis berdasarkan kebijakan yang dipilih. Angka aktual dapat berbeda tergantung kebijakan perusahaan.</p></div>
             </div>
         </div>
